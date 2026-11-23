@@ -1,0 +1,2175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICAEW Sustainability — Chapter 5: Role of the professional accountant in sustainability</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* 3D Flashcard Flip Animation */
+    .perspective-1000 {
+      perspective: 1200px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+
+    /* Smooth Card Entrance */
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-slide {
+      animation: fadeSlide 0.22s ease-out;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- ==================== STICKY HEADER ==================== -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <!-- Brand Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#059669] to-[#0f766e] flex items-center justify-center text-white font-extrabold text-sm shadow-sm shrink-0">
+          C5
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Chapter 5: Role of the professional accountant in sustainability</h1>
+          <p class="text-xs text-slate-500">ICAEW Sustainability & Ethics • 69 mục câu hỏi (Q1–Q51) & 20 Flashcards</p>
+        </div>
+      </div>
+
+      <!-- Top Navigation Tabs -->
+      <nav class="flex bg-slate-100 p-1 rounded-xl w-full md:w-auto shrink-0">
+        <button id="tab-quiz" onclick="switchTab('quiz')" class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-white text-[#047857] shadow-sm">
+          Trắc nghiệm (Carousel)
+        </button>
+        <button id="tab-flashcards" onclick="switchTab('flashcards')" class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900">
+          Flashcards (20 thẻ)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-5 sm:py-7">
+
+    <!-- ==================== TAB 1: QUIZ CAROUSEL ==================== -->
+    <section id="view-quiz" class="space-y-4 sm:space-y-5">
+
+      <!-- Mode & Cycle Control Bar -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <!-- Study Mode Toggle -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Chế độ:</span>
+          <div class="inline-flex bg-slate-100 p-1 rounded-xl">
+            <button id="mode-practice" onclick="setQuizMode('practice')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-[#059669] text-white shadow-sm">
+              Chế độ Luyện tập
+            </button>
+            <button id="mode-exam" onclick="setQuizMode('exam')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:text-slate-900">
+              Chế độ Kiểm tra
+            </button>
+          </div>
+        </div>
+
+        <!-- Cycle & Quick Actions -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span id="cycle-badge" class="px-3 py-1.5 rounded-xl bg-emerald-50 text-[#047857] text-xs font-bold border border-emerald-200/70">
+            Chu kỳ #1 (69 câu)
+          </span>
+          <button onclick="openFlaggedDrawer()" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-semibold transition-colors flex items-center gap-1.5">
+            <span>Phân vân</span>
+            <span id="header-flag-count" class="px-1.5 py-0.5 rounded-full bg-amber-500 text-white text-[10px] font-bold">0</span>
+          </button>
+          <button onclick="openHistoryModal()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors">
+            Lịch sử chu kỳ
+          </button>
+          <button onclick="startNewCycle(true)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors">
+            ↻ Chu kỳ mới
+          </button>
+          <button id="btn-submit-exam" onclick="finishCycle()" class="hidden px-3.5 py-1.5 rounded-xl bg-[#047857] hover:bg-emerald-800 text-white text-xs font-semibold shadow-sm transition-colors">
+            Nộp bài
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress, Live Error Rate & Navigator Drawer Trigger -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm mb-2.5">
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <span class="font-semibold text-slate-700">
+              Tiến độ: <span id="progress-text" class="font-bold text-[#047857]">0 / 69 câu (0%)</span>
+            </span>
+            <span id="live-correct-badge" class="hidden px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+              Đúng: 0
+            </span>
+            <span id="live-wrong-badge" class="hidden px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200">
+              Tỷ lệ sai: 0%
+            </span>
+          </div>
+          <button onclick="openNavigatorDrawer()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-[#047857] text-xs font-semibold transition-colors border border-emerald-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Bảng câu hỏi</span>
+          </button>
+        </div>
+        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-gradient-to-r from-[#059669] to-teal-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Exam Graded Banner -->
+      <div id="exam-review-banner" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <p class="text-sm font-bold text-emerald-950">Đã chấm điểm bài kiểm tra!</p>
+          <p id="exam-review-stats" class="text-xs text-emerald-800 mt-0.5"></p>
+        </div>
+        <button onclick="openSummaryModal()" class="px-4 py-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-xs font-semibold shrink-0 shadow-sm">
+          Xem bảng tổng kết
+        </button>
+      </div>
+
+      <!-- Carousel Question Card -->
+      <article id="question-card" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-8 animate-fade-slide">
+        <!-- Card Meta Row -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="q-position" class="px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold">Câu 1 / 69</span>
+            <span id="q-original-id" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">Q1</span>
+            <span id="q-lo-badge" class="px-2.5 py-1 rounded-full bg-emerald-50 text-[#047857] text-xs font-semibold border border-emerald-100">LO 5a</span>
+            <span id="q-type-badge" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">Chọn 1 đáp án</span>
+          </div>
+
+          <!-- Flag Button -->
+          <button id="btn-flag" onclick="toggleFlagCurrent()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            <span id="btn-flag-text">Phân vân / Chọn lụi</span>
+          </button>
+        </div>
+
+        <!-- Question Body (Scenario + Requirement) -->
+        <div class="mb-6 space-y-3">
+          <div id="q-scenario-box" class="hidden p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Tình huống (Scenario)</p>
+            <p id="q-scenario-text" class="text-sm sm:text-[15px] text-slate-700 leading-relaxed whitespace-pre-line"></p>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold uppercase tracking-wider text-[#059669] mb-1">Câu hỏi & Yêu cầu (Requirement)</p>
+            <h2 id="q-text" class="text-base sm:text-lg font-bold text-slate-900 leading-snug whitespace-pre-line"></h2>
+          </div>
+        </div>
+
+        <!-- Options List -->
+        <div id="q-options" class="space-y-3"></div>
+
+        <!-- Multi-select Check Button (Practice Mode Only) -->
+        <div id="multi-check-wrap" class="hidden mt-5">
+          <button onclick="submitMultiPractice()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-sm font-semibold shadow-sm transition-colors">
+            Kiểm tra đáp án
+          </button>
+        </div>
+
+        <!-- Official Solution & LO Box -->
+        <div id="explanation-box" class="hidden mt-6 p-4 sm:p-5 rounded-2xl border">
+          <div class="flex flex-wrap items-center gap-2 mb-2.5">
+            <span id="exp-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold"></span>
+            <span class="text-xs font-semibold text-slate-500">Giải thích cốt lõi (ICAEW Solution)</span>
+            <span id="exp-lo-tag" class="ml-auto px-2 py-0.5 rounded-md bg-white/80 text-[#047857] text-[11px] font-bold border border-emerald-100"></span>
+          </div>
+          <p id="exp-correct-answer" class="text-xs sm:text-sm font-bold text-slate-900 mb-2"></p>
+          <p id="exp-text" class="text-sm text-slate-700 leading-relaxed whitespace-pre-line"></p>
+        </div>
+
+        <!-- Carousel Prev / Next Footer -->
+        <div class="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between gap-3">
+          <button id="btn-prev" onclick="prevQuestion()" class="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 text-sm font-semibold transition-colors">
+            ← Câu trước
+          </button>
+          <span class="hidden sm:inline text-xs text-slate-400">Dùng phím ← / → để chuyển câu</span>
+          <button id="btn-next" onclick="nextQuestion()" class="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-sm font-semibold shadow-sm transition-colors">
+            Câu tiếp →
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ==================== TAB 2: FLASHCARDS ==================== -->
+    <section id="view-flashcards" class="hidden space-y-5">
+      <!-- Flashcard Controls Header -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Flashcards cốt lõi — Chapter 5 (20 thẻ)</h2>
+          <p class="text-xs text-slate-500">Chạm vào thẻ hoặc nhấn phím <kbd class="px-1.5 py-0.5 bg-slate-100 rounded border border-slate-300 text-[10px] font-bold">Space</kbd> để lật 3D</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex bg-slate-100 p-1 rounded-xl">
+            <button id="fc-filter-all" onclick="setFlashcardFilter('all')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-[#047857] shadow-sm">
+              Tất cả (<span id="fc-total-count">20</span>)
+            </button>
+            <button id="fc-filter-review" onclick="setFlashcardFilter('review')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
+              Cần ôn lại (<span id="fc-review-count">20</span>)
+            </button>
+            <button id="fc-filter-mastered" onclick="setFlashcardFilter('mastered')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
+              Đã nhớ (<span id="fc-mastered-count">0</span>)
+            </button>
+          </div>
+          <button onclick="shuffleFlashcards()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors">
+            ↻ Xáo trộn
+          </button>
+        </div>
+      </div>
+
+      <!-- Mastery Progress Bar -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div class="flex items-center justify-between text-xs sm:text-sm mb-2">
+          <span id="fc-position" class="font-bold text-slate-800">Thẻ 1 / 20</span>
+          <span id="fc-mastered-stats" class="font-bold text-[#047857]">Đã nhớ: 0 / 20 (0%)</span>
+        </div>
+        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+          <div id="fc-progress-bar" class="h-full bg-gradient-to-r from-[#059669] to-teal-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- 3D Flip Card -->
+      <div class="perspective-1000 w-full max-w-2xl mx-auto">
+        <div id="fc-card" onclick="flipFlashcard()" class="relative w-full min-h-[330px] sm:min-h-[370px] cursor-pointer transform-style-3d">
+          <!-- Front Face -->
+          <div class="absolute inset-0 backface-hidden bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-10 flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-2">
+              <span id="fc-front-tag" class="px-3 py-1 rounded-full bg-emerald-50 text-[#047857] text-xs font-bold border border-emerald-100">FC1</span>
+              <span id="fc-status-pill" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">Chưa đánh giá</span>
+            </div>
+            <div class="text-center my-auto py-4">
+              <p class="text-[11px] uppercase tracking-widest text-slate-400 font-bold mb-2">Khái niệm & Bẫy thi trọng tâm</p>
+              <h3 id="fc-front-text" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h3>
+            </div>
+            <p class="text-center text-xs text-slate-400">Chạm vào thẻ hoặc nhấn Space để lật xem giải thích</p>
+          </div>
+
+          <!-- Back Face -->
+          <div class="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-[#059669] to-[#0f766e] text-white rounded-3xl shadow-md p-6 sm:p-10 flex flex-col justify-between overflow-y-auto">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold">Kiến thức cốt lõi</span>
+              <span id="fc-back-tag" class="text-xs text-emerald-100 font-semibold"></span>
+            </div>
+            <div class="my-auto py-3">
+              <p id="fc-back-text" class="text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line"></p>
+            </div>
+            <p class="text-center text-xs text-emerald-200">Chạm để lật lại mặt trước</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashcard Action Bar -->
+      <div class="max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+        <button onclick="prevFlashcard()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors">
+          ← Thẻ trước
+        </button>
+
+        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-center">
+          <button onclick="markFlashcard('review')" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-sm font-semibold transition-colors">
+            Cần ôn lại
+          </button>
+          <button onclick="markFlashcard('mastered')" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-sm font-semibold shadow-sm transition-colors">
+            ✓ Đã nhớ
+          </button>
+        </div>
+
+        <button onclick="nextFlashcard()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors">
+          Thẻ tiếp →
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== QUESTION NAVIGATOR DRAWER ==================== -->
+  <div id="navigator-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this) closeNavigatorDrawer()">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl animate-fade-slide">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Bảng câu hỏi (Chapter 5)</h3>
+          <p id="nav-modal-subtitle" class="text-xs text-slate-500 mt-0.5">Chọn số thứ tự để nhảy nhanh tới câu hỏi</p>
+        </div>
+        <button onclick="closeNavigatorDrawer()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="px-5 pt-4 flex flex-wrap items-center gap-3 text-xs text-slate-600">
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-200 inline-block"></span> Chưa làm</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span> Đúng</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500 inline-block"></span> Sai</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-teal-500 inline-block"></span> Đã chọn (Thi)</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> Phân vân</span>
+      </div>
+
+      <div class="p-5 overflow-y-auto">
+        <div id="nav-grid" class="grid grid-cols-6 sm:grid-cols-10 gap-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FLAGGED QUESTIONS DRAWER ==================== -->
+  <div id="flagged-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this) closeFlaggedDrawer()">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl animate-fade-slide">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between gap-3">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Câu Phân vân / Chọn lụi</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Lưu bền vững trên trình duyệt để bạn ôn lại trước ngày thi</p>
+        </div>
+        <button onclick="closeFlaggedDrawer()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="px-5 pt-4 flex flex-wrap items-center justify-between gap-2">
+        <span id="flagged-modal-count" class="text-xs font-bold text-amber-800">0 câu đã đánh dấu</span>
+        <button id="btn-practice-flagged-modal" onclick="startFlaggedOnlyCycle()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white text-xs font-semibold shadow-sm transition-colors">
+          Luyện riêng câu phân vân
+        </button>
+      </div>
+
+      <div id="flagged-modal-list" class="p-5 overflow-y-auto space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- ==================== CYCLE HISTORY MODAL ==================== -->
+  <div id="history-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this) closeHistoryModal()">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl animate-fade-slide">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Lịch sử chu kỳ — Chapter 5</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Theo dõi sự tiến bộ và xu hướng tỷ lệ sai qua từng chu kỳ</p>
+        </div>
+        <button onclick="closeHistoryModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center">✕</button>
+      </div>
+
+      <div id="history-modal-body" class="p-5 overflow-y-auto"></div>
+
+      <div class="p-4 border-t border-slate-100 flex items-center justify-between">
+        <div id="reset-confirm-area">
+          <button onclick="showResetConfirm()" class="text-xs font-semibold text-rose-600 hover:text-rose-800 underline">
+            Đặt lại toàn bộ dữ liệu Chapter 5
+          </button>
+        </div>
+        <button onclick="closeHistoryModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== END-OF-CYCLE SUMMARY MODAL ==================== -->
+  <div id="summary-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4" onclick="if(event.target===this) closeSummaryModal()">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-7 shadow-xl animate-fade-slide">
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-100 text-[#047857] flex items-center justify-center text-2xl font-extrabold mb-3">
+          ✓
+        </div>
+        <h3 class="text-xl font-extrabold text-slate-900">Tổng kết chu kỳ</h3>
+        <p id="modal-cycle-subtitle" class="text-xs text-slate-500 mt-1"></p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-100 text-center">
+          <p class="text-xs text-emerald-700 font-medium">Điểm / Tỷ lệ đúng</p>
+          <p id="modal-correct" class="text-xl font-extrabold text-emerald-700 mt-0.5">0/69 (0%)</p>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-100 text-center">
+          <p class="text-xs text-rose-700 font-medium">Tỷ lệ sai</p>
+          <p id="modal-error-rate" class="text-2xl font-extrabold text-rose-600 mt-0.5">0%</p>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+          <p class="text-xs text-slate-600 font-medium">Số câu sai</p>
+          <p id="modal-wrong" class="text-xl font-bold text-slate-800 mt-0.5">0</p>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-100 text-center">
+          <p class="text-xs text-amber-700 font-medium">Phân vân / Chọn lụi</p>
+          <p id="modal-flagged" class="text-xl font-bold text-amber-700 mt-0.5">0</p>
+        </div>
+      </div>
+
+      <!-- Recent History Mini-Table -->
+      <div id="modal-history-preview" class="mb-5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70"></div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2.5">
+        <button onclick="startNewCycle(true)" class="w-full py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-sm font-semibold shadow-sm transition-colors">
+          Bắt đầu chu kỳ mới (Xáo trộn 69 câu)
+        </button>
+        <button id="modal-btn-wrong-and-flagged" onclick="startWrongAndFlaggedCycle()" class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold shadow-sm transition-colors">
+          Luyện riêng câu sai & phân vân
+        </button>
+        <button onclick="closeSummaryModal()" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
+          Đóng & xem lại chi tiết từng câu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs sm:text-sm font-medium px-4 py-3 rounded-xl shadow-lg"></div>
+
+  <script>
+    // =========================================================================
+    // 1. COMPLETE VERIFIED QUESTION BANK — CHAPTER 5 (ALL 69 ITEMS, Q1–Q51)
+    // =========================================================================
+    const QUESTIONS = [
+      {
+        id: "Q1", lo: "LO 5a", selectCount: 1,
+        q: "Logish Ltd (Logish) is producing a sustainability report for the first time. There is no mandatory requirement to produce a sustainability report in the country in which Logish operates.\n\nRequirement: Which of the following is true in respect of Logish's sustainability report?",
+        opts: [
+          {k:"A", t:"Logish must have taken action to become more sustainable if it is producing a sustainability report"},
+          {k:"B", t:"Producing a sustainability report can help Logish to become more sustainable as it enhances accountability"},
+          {k:"C", t:"There is only one sustainability framework which Logish should apply when producing its sustainability report"},
+          {k:"D", t:"Logish should only produce a sustainability report if it has positive actions to communicate"}
+        ],
+        ans: ["B"],
+        exp: "Producing a sustainability report does not necessarily mean Logish has taken action to become more sustainable. However, it can encourage more sustainable actions as it promotes transparency and accountability and can help a company to identify opportunities, risks and areas for improvement. To be transparent, Logish should use a balanced approach when reporting its actions and not just focus on positive actions. There are several sustainability frameworks that Logish could apply when producing its sustainability report."
+      },
+      {
+        id: "Q2", lo: "LO 4c, 5a", selectCount: 2,
+        q: "Mallasa Ltd (Mallasa) is based in Onetown and prepares a sustainability report which provides information on its impacts only.\n\nRequirement: Which two of the following would be included in Mallasa's sustainability report?",
+        opts: [
+          {k:"A", t:"There is a scarcity of skilled workers in Onetown which may have a negative impact on Mallasa's growth"},
+          {k:"B", t:"There are new government regulations which will impose sustainability-related tariffs on Mallasa's products"},
+          {k:"C", t:"Mallasa provides its employees with one day of paid leave per annum to volunteer at community events in Onetown"},
+          {k:"D", t:"Mallasa has changed to all-electric delivery vehicles in the year to reduce its vehicle emissions"},
+          {k:"E", t:"Mallasa's directors are concerned about the continued availability of the water needed to manufacture its products"}
+        ],
+        ans: ["C","D"],
+        exp: "As Mallasa is reporting on its impacts only, its sustainability report will only include information on how the company's actions affect people, including its employees (C) and the environment (D). Scarcity of workers (A), new regulations (B) and water scarcity (E) are examples of sustainability-related risks and opportunities."
+      },
+      {
+        id: "Q3", lo: "LO 5a", selectCount: 1,
+        q: "The shareholders of Rusti SA (Rusti) want to understand the sustainability-related matters that might affect Rusti's performance in the future. Rusti's shareholders have previously stated that they base their investment decisions only on the financial returns the company generates, and are not interested in how environmentally responsible the company is.\nThe directors of Rusti discuss how to meet the information needs of the shareholders:\n• Jed says: 'we should prepare a report that discusses Rusti's sustainability-related impacts'.\n• Rose says: 'we should prepare a report that discusses Rusti's sustainability-related risks and opportunities'.\n• Suresh says: 'we don't need to prepare a sustainability report as the investors are only interested in financial returns'.\n\nRequirement: Which of the directors is most likely to be correct?",
+        opts: [
+          {k:"A", t:"Jed only"},
+          {k:"B", t:"Rose only"},
+          {k:"C", t:"Suresh only"},
+          {k:"D", t:"None of the directors"}
+        ],
+        ans: ["B"],
+        exp: "Rose's suggestion to prepare a report discussing Rusti's sustainability-related risks and opportunities is the most appropriate approach. Even though the shareholders are primarily interested in financial returns, sustainability-related risks and opportunities can significantly impact a company's financial performance. Jed's suggestion to discuss sustainability-related impacts is broader and may not directly address the financial implications, while Suresh's view overlooks the fact that sustainability-related risks and opportunities can have financial implications."
+      },
+      {
+        id: "Q4", lo: "LO 5a", selectCount: 3,
+        q: "You work in the finance department of a large company. You have been asked to give a presentation on the benefits that sustainability reporting could have on the company.\n\nRequirement: Which three of the following would you include in your presentation as benefits of corporate sustainability reporting?",
+        opts: [
+          {k:"A", t:"It can help a company to access bank loans and other sources of finance"},
+          {k:"B", t:"It ensures that a company's actions are sustainable"},
+          {k:"C", t:"It helps to support employee engagement"},
+          {k:"D", t:"It encourages a company to report an overly positive view of its sustainable business practices."},
+          {k:"E", t:"It helps to support regulatory compliance"}
+        ],
+        ans: ["A","C","E"],
+        exp: "Sustainability reporting does not necessarily ensure that a company's actions are sustainable (B), but it can encourage more sustainable actions through enhanced transparency and accountability. Reporting an overly positive view (D) is a challenge rather than a benefit of sustainability reporting and may lead to greenwashing claims."
+      },
+      {
+        id: "Q5", lo: "LO 5a", selectCount: 1,
+        q: "Marco works in the finance department of Dantee Ltd (Dantee) and has been involved in preparing Dantee's sustainability report for the current and previous years. The new finance director, who does not have any experience of sustainability reporting, has asked Marco to explain some of the challenges he faced when preparing the sustainability reports.\nMarco has identified the following:\n(1) Dantee has identified risks that would not otherwise have been considered.\n(2) Collating the data needed to prepare the sustainability report is time consuming.\n(3) Dantee has allocated a significant amount of resource in order to produce its sustainability reports.\n\nRequirement: Which of the matters identified are challenges of sustainability reporting?",
+        opts: [
+          {k:"A", t:"1 and 2 only"},
+          {k:"B", t:"1 and 3 only"},
+          {k:"C", t:"2 and 3 only"},
+          {k:"D", t:"1, 2, and 3"}
+        ],
+        ans: ["C"],
+        exp: "Identifying risks that would not otherwise have been considered is a benefit rather than a challenge of sustainability reporting. Collating data and the intensive resources needed to produce sustainability reports are challenges."
+      },
+      {
+        id: "Q6a", lo: "LO 5b", selectCount: 1,
+        q: "B&A Ltd (B&A) prepares a strategic report as required by the Companies Act 2006.\n\nRequirement (1/2): Identify whether the following statement is true or false with regards to B&A's strategic report:\nThe intention of the strategic report is to provide information that meets the needs of a wide range of stakeholders.",
+        opts: [
+          {k:"A", t:"True"},
+          {k:"B", t:"False"}
+        ],
+        ans: ["B"],
+        exp: "The strategic report is directed primarily towards shareholders. However, it may contain information that is relevant to other stakeholders, particularly because the strategic report should contain information about the impact of the company on environmental, social and community matters."
+      },
+      {
+        id: "Q6b", lo: "LO 5b", selectCount: 1,
+        q: "B&A Ltd (B&A) prepares a strategic report as required by the Companies Act 2006.\n\nRequirement (2/2): Identify whether the following statement is true or false with regards to B&A's strategic report:\nThe strategic report does not require any disclosures specifically related to climate-related matters.",
+        opts: [
+          {k:"C", t:"True"},
+          {k:"D", t:"False"}
+        ],
+        ans: ["D"],
+        exp: "The strategic report should include climate-related financial disclosures."
+      },
+      {
+        id: "Q7", lo: "LO 5b", selectCount: 1,
+        q: "Three colleagues were discussing the Taskforce on Climate-related Financial Disclosures (TCFD) in preparation for an upcoming training course:\n• Annie: 'The TCFD set out disclosure recommendations relating to the financial implications of climate-related financial matters, risks and opportunities. The recommendations were then made mandatory in some countries'.\n• Ben: 'The TCFD recommendations require disclosure of the GHG emissions'.\n• Chloe: 'The TCFD has an active role in ensuring companies that claim to report in line with its recommendations have applied the recommendations correctly'.\n\nRequirement: Which of the colleagues is correct?",
+        opts: [
+          {k:"A", t:"Annie only"},
+          {k:"B", t:"Annie and Ben only"},
+          {k:"C", t:"Chloe only"},
+          {k:"D", t:"Ben and Chloe only"}
+        ],
+        ans: ["B"],
+        exp: "The TCFD issued recommendations requiring companies to identify the climate-related risks and opportunities, assess their financial implications, and consider the resilience of a business's strategy to future climate outcomes. The TCFD had no power to mandate its recommendations and played no active role in ensuring companies correctly applied its recommendations, but its recommendations were adopted and made mandatory in several countries. The TCFD recommendations also require companies to report their greenhouse gas (GHG) emissions."
+      },
+      {
+        id: "Q8", lo: "LO 5b", selectCount: 2,
+        q: "IFRS Sustainability Disclosure Standards are issued by the International Sustainability Standards Board (ISSB).\n\nRequirement: Which two of the following statements about IFRS Sustainability Disclosure Standards are correct?",
+        opts: [
+          {k:"A", t:"They require disclosure of all an entity's material impacts on people and the environment"},
+          {k:"B", t:"Their application results in information that satisfies the needs of investors"},
+          {k:"C", t:"The ISSB has mandated the application of the IFRS Sustainability Disclosure Standards"},
+          {k:"D", t:"They require disclosures to be included within an entity's annual report"},
+          {k:"E", t:"They focus on climate-related matters only"}
+        ],
+        ans: ["B","D"],
+        exp: "IFRS Sustainability Disclosure Standards are primarily intended to satisfy the information needs of investors as well as other providers of capital such as lenders and creditors. Sustainability-related disclosures should form part of the annual report. IFRS Sustainability Disclosure Standards require disclosure of certain impacts, such as greenhouse gas (GHG) emissions, but not all material impacts (A). The ISSB has no power to mandate their application (C). IFRS S2, Climate-related Disclosures focuses on climate-related disclosures (E) but IFRS S1 covers general sustainability-related disclosures and is therefore wider in scope."
+      },
+      {
+        id: "Q9", lo: "LO 5b", selectCount: 1,
+        q: "Farah works in the finance department of Lansby AG (Lansby). Lansby is based in the EU and is required to comply with the Corporate Sustainability Reporting Directive (CSRD).\n\nRequirement: Which of the statements regarding Lansby's sustainability reporting under the CSRD is correct?",
+        opts: [
+          {k:"A", t:"Lansby is required to report on its sustainability practices only if it has more than 500 employees"},
+          {k:"B", t:"Lansby should disclose sustainability related risks and opportunities but not its impacts"},
+          {k:"C", t:"Lansby should provide information to meet the needs of its investors but not wider stakeholder groups"},
+          {k:"D", t:"Lansby is required to obtain assurance over its sustainability reporting"}
+        ],
+        ans: ["D"],
+        exp: "Lansby is required to obtain assurance over its sustainability reporting under the EU Corporate Sustainability Reporting Directive (CSRD)."
+      },
+      {
+        id: "Q10a", lo: "LO 5b", selectCount: 1,
+        q: "Requirement (1/2): Identify whether the following statement regarding Global Reporting Initiative (GRI) Standards is true or false:\nApplication of GRI Standards is mandatory for certain companies in the UK.",
+        opts: [
+          {k:"A", t:"True"},
+          {k:"B", t:"False"}
+        ],
+        ans: ["B"],
+        exp: "Application of GRI Standards is voluntary."
+      },
+      {
+        id: "Q10b", lo: "LO 5b", selectCount: 1,
+        q: "Requirement (2/2): Identify whether the following statement regarding Global Reporting Initiative (GRI) Standards is true or false:\nGRI Standards provide entities with a framework for identifying and reporting on their sustainability-related impacts but not their risks and opportunities.",
+        opts: [
+          {k:"C", t:"True"},
+          {k:"D", t:"False"}
+        ],
+        ans: ["C"],
+        exp: "GRI Standards provide a framework for reporting sustainability-related impacts to a wide group of stakeholders."
+      },
+      {
+        id: "Q11", lo: "LO 5d", selectCount: 3,
+        q: "ICAEW and the other accountancy bodies have a role in driving sustainability.\n\nRequirement: Which three of the following are ways in which accountancy bodies can drive sustainability?",
+        opts: [
+          {k:"A", t:"Discipline professional accountants who do not support sustainability initiatives"},
+          {k:"B", t:"Work with policy makers to help shape sustainability regulations"},
+          {k:"C", t:"Advise the clients of professional accountants on how to implement sustainable strategies"},
+          {k:"D", t:"Provide training to professional accountants on standards and guidance relating to sustainability reporting"},
+          {k:"E", t:"Conduct and publish research into best practice in sustainability issues"}
+        ],
+        ans: ["B","D","E"],
+        exp: "Accountancy bodies work with policy makers and businesses to help shape regulations and policies (B). They provide education and training to students and members on sustainability matters (D) and are involved in research and benchmarking into current best practice (E). They cannot discipline professional accountants who do not support sustainability initiatives (A) and cannot advise the clients of professional accountants (C). Instead, they support their members and the members can then advise their clients."
+      },
+      {
+        id: "Q12a", lo: "LO 5c", selectCount: 1,
+        q: "One way in which professional accountants are involved in work that supports sustainability is to undertake sustainability assurance engagements.\n\nRequirement (1/3): Identify whether the following statement regarding assurance engagements is true or false:\nThe primary objective of a sustainability assurance engagement is to give stakeholders certainty over the disclosures made by the company.",
+        opts: [
+          {k:"A", t:"True"},
+          {k:"B", t:"False"}
+        ],
+        ans: ["B"],
+        exp: "A sustainability assurance engagement cannot give certainty over the disclosures made. All assurance engagements are subject to some inherent limitations which mean it cannot be absolute."
+      },
+      {
+        id: "Q12b", lo: "LO 5c", selectCount: 1,
+        q: "One way in which professional accountants are involved in work that supports sustainability is to undertake sustainability assurance engagements.\n\nRequirement (2/3): Identify whether the following statement regarding assurance engagements is true or false:\nA benefit of sustainability assurance is that it can help identify potential sustainability-related risks.",
+        opts: [
+          {k:"C", t:"True"},
+          {k:"D", t:"False"}
+        ],
+        ans: ["C"],
+        exp: "An assurance provider can help identify potential sustainability-related risks as part of the assurance process as well as advise on management of those risks."
+      },
+      {
+        id: "Q12c", lo: "LO 5c", selectCount: 1,
+        q: "One way in which professional accountants are involved in work that supports sustainability is to undertake sustainability assurance engagements.\n\nRequirement (3/3): Identify whether the following statement regarding assurance engagements is true or false:\nA professional accountant working on a sustainability assurance engagement can support sustainability by advising their clients on how to improve their reporting and achieve compliance with regulations.",
+        opts: [
+          {k:"E", t:"True"},
+          {k:"F", t:"False"}
+        ],
+        ans: ["E"],
+        exp: "A professional accountant who works on a sustainability assurance engagement can advise clients on how to improve their reporting, risk management and strategy, and achieve compliance with regulations."
+      },
+      {
+        id: "Q13a", lo: "LO 5c", selectCount: 1,
+        q: "Assurance engagements can give either a reasonable or limited level of assurance.\n\nRequirement (1/2): Identify whether the following statement is correct or incorrect:\nA sustainability assurance engagement that is a limited assurance engagement requires less evidence to be obtained than a reasonable assurance engagement.",
+        opts: [
+          {k:"A", t:"Correct"},
+          {k:"B", t:"Incorrect"}
+        ],
+        ans: ["A"],
+        exp: "A limited assurance engagement requires less evidence to be obtained as a negative opinion is given."
+      },
+      {
+        id: "Q13b", lo: "LO 5c", selectCount: 1,
+        q: "Assurance engagements can give either a reasonable or limited level of assurance.\n\nRequirement (2/2): Identify whether the following statement is correct or incorrect:\nA sustainability assurance provider has expressed an opinion stating: 'nothing has come to our attention to indicate that the company has not complied with the specified criteria'. The user of the report has interpreted this as a reasonable assurance opinion.",
+        opts: [
+          {k:"C", t:"Correct"},
+          {k:"D", t:"Incorrect"}
+        ],
+        ans: ["D"],
+        exp: "This is a limited assurance opinion as it implies that matters could exist which means the company has not complied with the specified criteria, but that the practitioner has not uncovered any such matter."
+      },
+      {
+        id: "Q14", lo: "LO 5c", selectCount: 3,
+        q: "Franwel SpA (Franwel) prepares a sustainability report. It is not mandatory for the sustainability report to be subject to assurance, but the directors are considering whether the benefits of obtaining sustainability assurance would outweigh the challenges.\n\nRequirement: Which three of the following are benefits of sustainability assurance?",
+        opts: [
+          {k:"A", t:"It enhances the credibility of the report"},
+          {k:"B", t:"It can help to manage the expectations gap"},
+          {k:"C", t:"It can improve market confidence in sustainability reports"},
+          {k:"D", t:"It is easy for Franwel to obtain a sustainability assurance opinion as the data is always readily available"},
+          {k:"E", t:"It can help to identify additional sustainability-related risks not identified by Franwel"}
+        ],
+        ans: ["A","C","E"],
+        exp: "Assurance adds credibility to sustainability disclosures (A), which improves investor confidence. Widespread adoption of sustainability assurance can lead to greater market confidence in sustainability reports (C). An assurance provider can help identify potential sustainability-related risks as part of the assurance process (E). The expectations gap (B) is one of the challenges of sustainability assurance as users often interpret it to mean absolute assurance. The availability and subjective nature of data (D) mean it can be difficult to arrive at an opinion."
+      },
+      {
+        id: "Q15a", lo: "LO 5b", selectCount: 1,
+        q: "Piper works in the finance team at Bimarz Ltd (Bimarz) and is responsible for preparing information for inclusion in a sustainability report prepared in accordance with GRI Standards. Piper has made statements about the content of the sustainability report.\n\nRequirement (1/2): Identify whether the following statement made by Piper is correct or incorrect:\nThe sustainability report is intended to provide information for a wide range of stakeholders.",
+        opts: [
+          {k:"A", t:"Correct"},
+          {k:"B", t:"Incorrect"}
+        ],
+        ans: ["A"],
+        exp: "A sustainability report prepared using GRI Standards is suitable for a wide range of stakeholders that are interested in a company's impacts."
+      },
+      {
+        id: "Q15b", lo: "LO 5b", selectCount: 1,
+        q: "Piper works in the finance team at Bimarz Ltd (Bimarz) and is responsible for preparing information for inclusion in a sustainability report prepared in accordance with GRI Standards. Piper has made statements about the content of the sustainability report.\n\nRequirement (2/2): Identify whether the following statement made by Piper is correct or incorrect:\nThe sustainability report will help Bimarz to report on its sustainability-related dependencies.",
+        opts: [
+          {k:"C", t:"Correct"},
+          {k:"D", t:"Incorrect"}
+        ],
+        ans: ["D"],
+        exp: "GRI Standards helps companies communicate their sustainability-related impacts."
+      },
+      {
+        id: "Q16a", lo: "LO 5b", selectCount: 1,
+        q: "Requirement (1/3): Identify the intended user group for the following sustainability disclosure:\nKilpa Ltd (Kilpa) discloses greenhouse gas (GHG) emissions in accordance with IFRS S2, Climate-related Disclosures.",
+        opts: [
+          {k:"A", t:"Investors and lenders"},
+          {k:"B", t:"A wide range of stakeholders including employees, customers and the public"}
+        ],
+        ans: ["A"],
+        exp: "Information disclosed in accordance with IFRS S2 is intended to provide information to investors and lenders."
+      },
+      {
+        id: "Q16b", lo: "LO 5b", selectCount: 1,
+        q: "Requirement (2/3): Identify the intended user group for the following sustainability disclosure:\nHirtha Ltd (Hirtha) has prepared a sustainability report using the GRI Standards, including details of its impact on society.",
+        opts: [
+          {k:"C", t:"Investors and lenders"},
+          {k:"D", t:"A wide range of stakeholders including employees, customers and the public"}
+        ],
+        ans: ["D"],
+        exp: "Information on Hirtha Ltd's impacts reported in accordance with GRI Standards is intended to provide information to a wide range of stakeholders."
+      },
+      {
+        id: "Q16c", lo: "LO 5b", selectCount: 1,
+        q: "Requirement (3/3): Identify the intended user group for the following sustainability disclosure:\nGrimbay Ltd (Grimbay) prepares information on its nature-related risks and opportunities in accordance with the Taskforce on Nature-related Financial Disclosures (TNFD) recommendations.",
+        opts: [
+          {k:"E", t:"Investors and lenders"},
+          {k:"F", t:"A wide range of stakeholders including employees, customers and the public"}
+        ],
+        ans: ["E"],
+        exp: "Information disclosed in accordance with the TNFD recommendations is most useful to investors and lenders as it recommends information is provided on nature-related risks and opportunities."
+      },
+      {
+        id: "Q17", lo: "LO 5b", selectCount: 1,
+        q: "The directors of Treno SpA (Treno) are preparing its latest sustainability-related financial disclosures. They want to focus on disclosures that meet the primary information needs of its investors and lenders. The investors and lenders have indicated that they want information to help them assess the company's prospects and how well their investment in Treno may perform.\n\nRequirement: Which of the following types of sustainability information that Treno could include would be most likely to meet the information needs of its investors and lenders?",
+        opts: [
+          {k:"A", t:"Information on sustainability-related risks and opportunities"},
+          {k:"B", t:"Information on environmental impacts"},
+          {k:"C", t:"Information on environmental and social dependencies"},
+          {k:"D", t:"Information on sustainability-related risks only"}
+        ],
+        ans: ["A"],
+        exp: "Investors and lenders are primarily interested in how a company's impacts and dependencies on the environment and people create risks and opportunities for the company."
+      },
+      {
+        id: "Q18a", lo: "LO 5b", selectCount: 1,
+        q: "Fenster GmbH (Fenster) is a large company based in Germany. Mica, Emma and Mohammed are directors of Fenster and have discussed whether the Corporate Sustainability Due Diligence Directive (CSDDD) applies.\n\nRequirement (1/3): Identify whether the following statement is correct or incorrect:\nMica: 'It's mandatory that we comply with CSDDD as Fenster is a large company based in the EU'.",
+        opts: [
+          {k:"A", t:"Correct"},
+          {k:"B", t:"Incorrect"}
+        ],
+        ans: ["A"],
+        exp: "Mica is correct. CSDDD applies to EU companies that are classified as large and non-EU companies which are classified as large and meet specified revenue thresholds."
+      },
+      {
+        id: "Q18b", lo: "LO 5b", selectCount: 1,
+        q: "Fenster GmbH (Fenster) is a large company based in Germany. Mica, Emma and Mohammed are directors of Fenster and have discussed whether the Corporate Sustainability Due Diligence Directive (CSDDD) applies.\n\nRequirement (2/3): Identify whether the following statement is correct or incorrect:\nEmma: 'Fenster will need to apply the CSDDD requirements in its own operations only. We don't need to worry about our value chain'.",
+        opts: [
+          {k:"C", t:"Correct"},
+          {k:"D", t:"Incorrect"}
+        ],
+        ans: ["D"],
+        exp: "Emma is incorrect. CSDDD aims to promote sustainable and responsible corporate behaviour in companies' operations and throughout their global value chains."
+      },
+      {
+        id: "Q18c", lo: "LO 5b", selectCount: 1,
+        q: "Fenster GmbH (Fenster) is a large company based in Germany. Mica, Emma and Mohammed are directors of Fenster and have discussed whether the Corporate Sustainability Due Diligence Directive (CSDDD) applies.\n\nRequirement (3/3): Identify whether the following statement is correct or incorrect:\nMohammed: 'CSDDD requires Fenster to consider only the environmental impacts of its actions'.",
+        opts: [
+          {k:"E", t:"Correct"},
+          {k:"F", t:"Incorrect"}
+        ],
+        ans: ["F"],
+        exp: "Mohammed is incorrect. The CSDDD requires a company to identify and address any potential and actual adverse human rights and environmental impacts of its actions."
+      },
+      {
+        id: "Q19", lo: "LO 5b", selectCount: 1,
+        q: "Brei Ltd (Brei), a global logistics company, is preparing its annual sustainability report in accordance with GRI Standards.\nDuring the reporting period, Brei faced two key issues:\n(1) A substantial increase in fuel costs due to market volatility.\n(2) Community backlash over the construction of a new distribution centre in previously undeveloped land.\n\nRequirement: Which of the issues is likely to be included in Brei's sustainability report from an impact materiality perspective?",
+        opts: [
+          {k:"A", t:"1 only"},
+          {k:"B", t:"2 only"},
+          {k:"C", t:"1 and 2"},
+          {k:"D", t:"Neither 1 nor 2"}
+        ],
+        ans: ["B"],
+        exp: "Impact materiality considers the effects a company's operations have on people and the environment. The community backlash over the new distribution centre directly affects the local community and their environment, making it an issue from an impact materiality perspective. GRI Standards prioritise reporting on topics that reflect an organisation's material impacts. The increase in fuel costs would be considered under financial materiality, as it affects expenses and profitability."
+      },
+      {
+        id: "Q20", lo: "LO 5a", selectCount: 3,
+        q: "Siobhan is the newly appointed Finance Director at Tombre Ltd (Tombre). She is trying to convince her fellow directors of the benefits to Tombre of preparing a sustainability report for the first time.\n\nRequirement: Which three of the following are potential benefits of sustainability reporting?",
+        opts: [
+          {k:"A", t:"Improved employee engagement"},
+          {k:"B", t:"Reduced production costs"},
+          {k:"C", t:"Guaranteed increase in sales revenue"},
+          {k:"D", t:"Better identification and management of risks"},
+          {k:"E", t:"Promotes transparency and accountability"}
+        ],
+        ans: ["A","D","E"],
+        exp: "By highlighting the company's sustainability efforts, reporting on a company's impacts can boost employee morale and engagement (A). By assessing and reporting on sustainability-related risks and opportunities, companies can better identify and manage potential threats (D). Regular sustainability reporting promotes transparency (E) by openly sharing the company's sustainability-related performance. Reduced production costs (B) and guaranteed increased sales revenue (C) are not benefits of sustainability reporting."
+      },
+      {
+        id: "Q21", lo: "LO 5a", selectCount: 2,
+        q: "Chiesa SpA (Chiesa) is planning to prepare a sustainability report for the first time. The directors are aware of the benefits of sustainability reporting but are unclear as to the challenges Chiesa may face.\n\nRequirement: Which two of the following are challenges of sustainability reporting?",
+        opts: [
+          {k:"A", t:"Poorer decision-making processes"},
+          {k:"B", t:"Difficulty in collecting accurate data"},
+          {k:"C", t:"Selecting an appropriate framework for reporting"},
+          {k:"D", t:"Increased likelihood of identifying risks"},
+          {k:"E", t:"More difficulty in attracting investment"}
+        ],
+        ans: ["B","C"],
+        exp: "The data required to prepare a sustainability report can be difficult to collect (B), requiring comprehensive information to be collected from various departments within the organisation and across the supply chain. Companies need to select and apply the reporting framework that meets the objective of the company's reporting (C). Sustainability reporting should improve decision-making (A), help identify risks (D) and may help attract investment (E)."
+      },
+      {
+        id: "Q22", lo: "LO 5b", selectCount: 1,
+        q: "McCabe plc (McCabe) is a UK-based company. It prepares a strategic report in compliance with the Companies Act 2006.\n\nRequirement: Which of the following must be included in the strategic report according to the Companies Act 2006?",
+        opts: [
+          {k:"A", t:"Principal risks and uncertainties including sustainability risks"},
+          {k:"B", t:"Information on the four areas of governance, strategy, risk management and metrics and targets"},
+          {k:"C", t:"Plans for future product development"},
+          {k:"D", t:"Greenhouse gas (GHG) emissions calculated in accordance with the GHG Protocol Corporate Standard"}
+        ],
+        ans: ["A"],
+        exp: "The Companies Act 2006 mandates that UK companies include principal risks and uncertainties facing the company in its strategic report, which encompasses sustainability-related risks. Information on governance, strategy, risk management and metrics and targets (B) is a requirement of TCFD, IFRS Sustainability Disclosure Standards and TNFD. Disclosure of GHG emissions per GHG Protocol (D) is a requirement of TCFD, IFRS Sustainability Disclosure Standards, and SECR."
+      },
+      {
+        id: "Q23", lo: "LO 5b", selectCount: 1,
+        q: "The directors of Wrasp Ltd (Wrasp), a company based in the UK, are preparing the company's strategic report in line with the Companies Act 2006. They aim to ensure full compliance by including all necessary information in the report.\n\nRequirement: Which of the following is not a mandatory disclosure required in the strategic report according to the Companies Act 2006?",
+        opts: [
+          {k:"A", t:"Climate-related financial disclosures"},
+          {k:"B", t:"Information on gender diversity"},
+          {k:"C", t:"Information on forthcoming product launches"},
+          {k:"D", t:"Information on respect for human rights"}
+        ],
+        ans: ["C"],
+        exp: "While the directors of Wrasp may choose to provide information on forthcoming product launches, the Companies Act 2006 does not mandate this as part of the strategic report. The report should include principal risks and uncertainties (including sustainability), and information about environmental, social and community matters, employees, respect for human rights and anti-corruption and anti-bribery matters."
+      },
+      {
+        id: "Q24", lo: "LO 5b", selectCount: 1,
+        q: "Requirement: What four areas does the Task Force for Climate-related Financial Disclosures (TCFD) recommendations require companies to report information under?",
+        opts: [
+          {k:"A", t:"Environmental impact, social responsibility, governance and strategy"},
+          {k:"B", t:"Climate risks, financial performance, stakeholder engagement and metrics"},
+          {k:"C", t:"Sustainability, risk management, financial metrics and governance"},
+          {k:"D", t:"Governance, strategy, risk management, and metrics and targets"}
+        ],
+        ans: ["D"],
+        exp: "Governance, strategy, risk management, and metrics and targets are the four key areas required by the TCFD recommendations for reporting climate-related disclosures."
+      },
+      {
+        id: "Q25a", lo: "LO 5b", selectCount: 1,
+        q: "Mayop Ltd (Mayop) is a medium-sized UK-based company and is aware of the laws and regulations that apply to UK companies. It has decided to apply IFRS Sustainability Disclosure Standards for the first time. Mayop's board is particularly concerned about reporting information in accordance with IFRS S2, Climate-related Disclosures.\n\nRequirement (1/2): Identify whether the following statement is true or false:\nIFRS S2 requires that Mayop calculate its greenhouse gas (GHG) emissions in accordance with the GHG Protocol Corporate Standard.",
+        opts: [
+          {k:"A", t:"True"},
+          {k:"B", t:"False"}
+        ],
+        ans: ["A"],
+        exp: "IFRS S2 requires disclosure of GHG emissions calculated in accordance with the GHG Protocol Corporate Standard."
+      },
+      {
+        id: "Q25b", lo: "LO 5b", selectCount: 1,
+        q: "Mayop Ltd (Mayop) is a medium-sized UK-based company and is aware of the laws and regulations that apply to UK companies. It has decided to apply IFRS Sustainability Disclosure Standards for the first time. Mayop's board is particularly concerned about reporting information in accordance with IFRS S2, Climate-related Disclosures.\n\nRequirement (2/2): Identify whether the following statement is true or false:\nIFRS S2 requires disclosure of climate-related risks only.",
+        opts: [
+          {k:"C", t:"True"},
+          {k:"D", t:"False"}
+        ],
+        ans: ["D"],
+        exp: "IFRS S2 requires disclosure of climate-related risks and opportunities and certain specified impacts such as GHG emissions."
+      },
+      {
+        id: "Q26", lo: "LO 5b", selectCount: 1,
+        q: "The directors of Violete Ltd (Violete) are preparing sustainability-related financial disclosures in accordance with IFRS S1, General Requirements for Disclosure of Sustainability-related Financial Information and are determining where to include their sustainability-related disclosures.\n\nRequirement: According to IFRS S1, where should Violete include its sustainability-related financial information?",
+        opts: [
+          {k:"A", t:"In the company's annual report, alongside the financial statements"},
+          {k:"B", t:"In a separate sustainability report, published independently of the annual report"},
+          {k:"C", t:"On the company's website, updated quarterly"},
+          {k:"D", t:"In a press release issued at the end of the financial year"}
+        ],
+        ans: ["A"],
+        exp: "According to IFRS S1, sustainability-related financial information must be included within a company's annual report, alongside the financial statements. This ensures that such information is given the same level of importance and scrutiny as the financial data."
+      },
+      {
+        id: "Q27a", lo: "LO 5b", selectCount: 1,
+        q: "Stromboli SrL (Stromboli) is an EU-based company. Its directors are considering the standards and regulations that are applicable in the EU.\n\nRequirement (1/3): Identify whether the following statement regarding standards and regulations applicable in the EU is true or false:\nThe EU's Carbon Border Adjustment Mechanism (CBAM) is applicable to goods imported into the EU.",
+        opts: [
+          {k:"A", t:"True"},
+          {k:"B", t:"False"}
+        ],
+        ans: ["A"],
+        exp: "The main aim of the EU's CBAM is to prevent carbon leakage. It does this by adding a carbon price to goods imported into the EU."
+      },
+      {
+        id: "Q27b", lo: "LO 5b", selectCount: 1,
+        q: "Stromboli SrL (Stromboli) is an EU-based company. Its directors are considering the standards and regulations that are applicable in the EU.\n\nRequirement (2/3): Identify whether the following statement regarding standards and regulations applicable in the EU is true or false:\nThe EU's Corporate Sustainability Due Diligence Directive (CSDDD) applies to all EU-based companies.",
+        opts: [
+          {k:"C", t:"True"},
+          {k:"D", t:"False"}
+        ],
+        ans: ["D"],
+        exp: "The CSDDD applies to EU (and non-EU) companies which are classified as large and which meet revenue thresholds."
+      },
+      {
+        id: "Q27c", lo: "LO 5b", selectCount: 1,
+        q: "Stromboli SrL (Stromboli) is an EU-based company. Its directors are considering the standards and regulations that are applicable in the EU.\n\nRequirement (3/3): Identify whether the following statement regarding standards and regulations applicable in the EU is true or false:\nCompanies must adopt IFRS Sustainability Disclosure Standards in order to comply with the requirements of the EU Corporate Sustainability Reporting Directive (CSRD).",
+        opts: [
+          {k:"E", t:"True"},
+          {k:"F", t:"False"}
+        ],
+        ans: ["F"],
+        exp: "Companies must apply the European Sustainability Reporting Standards (ESRSs) in order to comply with the CSRD and not IFRS Sustainability Disclosure Standards."
+      },
+      {
+        id: "Q28", lo: "LO 5b", selectCount: 1,
+        q: "The directors of Birne GmbH (Birne), an unlisted company based in Germany (which is part of the EU), are discussing the mandatory sustainability reporting requirements under the European Union's Corporate Sustainability Reporting Directive (CSRD). They are trying to decide whether reporting under CSRD will be mandatory for Birne. The directors make the following statements:\n• Elias: 'CSRD will be mandatory for Birne as the CSRD applies to all EU companies'.\n• Matteo: 'Birne will not be required to report as it is not listed on an EU stock market'.\n• Anna: 'Birne will be required to report if it meets the size thresholds relating to employees, annual revenue and assets'.\n\nRequirement: Which of the directors is correct?",
+        opts: [
+          {k:"A", t:"Elias"},
+          {k:"B", t:"Matteo"},
+          {k:"C", t:"Anna"},
+          {k:"D", t:"None of the directors"}
+        ],
+        ans: ["C"],
+        exp: "As Anna states, Birne will have to report under CSRD if it meets the size thresholds."
+      },
+      {
+        id: "Q29", lo: "LO 5b", selectCount: 1,
+        q: "Requirement: Which sustainability reporting framework mandates that a reporting entity must obtain assurance over its sustainability disclosures?",
+        opts: [
+          {k:"A", t:"The IFRS Sustainability Disclosure Standards"},
+          {k:"B", t:"The Global Reporting Initiative (GRI) Standards"},
+          {k:"C", t:"The Task Force on Climate-related Financial Disclosures (TCFD) recommendations"},
+          {k:"D", t:"The EU Corporate Sustainability Reporting Directive (CSRD)"}
+        ],
+        ans: ["D"],
+        exp: "The CSRD requires companies to obtain assurance over their sustainability disclosures. This is mandated to ensure the credibility and reliability of the reported sustainability information. IFRS Sustainability Disclosure Standards, GRI Standards, and TCFD recommendations do not mandate assurance; they leave the assurance decision to the reporting entities or jurisdictions implementing the standards."
+      },
+      {
+        id: "Q30", lo: "LO 5c", selectCount: 1,
+        q: "Viesna Ltd (Viesna) has hired an external audit firm to provide assurance over its annual sustainability report. The audit firm has been tasked to provide assurance that involves a high level of evidence gathering and results in a positive opinion stating the auditor's conclusion on the reliability of the report.\n\nRequirement: What type of assurance is the audit firm providing over Viesna's sustainability report?",
+        opts: [
+          {k:"A", t:"Reasonable assurance"},
+          {k:"B", t:"Limited assurance"},
+          {k:"C", t:"Absolute assurance"},
+          {k:"D", t:"Negative assurance"}
+        ],
+        ans: ["A"],
+        exp: "Reasonable assurance involves a high level of evidence and results in a positive opinion which states the auditor's conclusion on the reliability of the report. An opinion which expresses a less certain conclusion is limited assurance (B). Assurance has inherent limitations so absolute certainty cannot be given (C). Negative assurance is not something which is provided (D)."
+      },
+      {
+        id: "Q31", lo: "LO 5c", selectCount: 1,
+        q: "The directors of Smill Ltd (Smill) are reviewing an assurance report prepared by an external assurance provider over Smill's sustainability disclosures. The assurance report concludes with the wording 'nothing has come to our attention to indicate that the company has not complied with the specified criteria'.\n\nRequirement: What level of assurance has the external assurance provider given in respect of Smill's sustainability disclosures?",
+        opts: [
+          {k:"A", t:"Reasonable assurance"},
+          {k:"B", t:"Limited assurance"},
+          {k:"C", t:"Positive assurance"},
+          {k:"D", t:"No assurance"}
+        ],
+        ans: ["B"],
+        exp: "Limited assurance involves a limited scope of evidence and results in a negative opinion typically phrased as 'nothing has come to our attention'."
+      },
+      {
+        id: "Q32", lo: "LO 5b", selectCount: 3,
+        q: "Hulthor GmbH (Hulthor) is required to report in accordance with the European Union's Corporate Sustainability Reporting Directive (CSRD).\n\nRequirement: Which three of the following are correct in respect of sustainability reporting under the CSRD?",
+        opts: [
+          {k:"A", t:"Hulthor must report its sustainability-related risks"},
+          {k:"B", t:"Hulthor must report its sustainability-related impacts"},
+          {k:"C", t:"The usefulness of the information reported by Hulthor is limited to the investors and providers of capital"},
+          {k:"D", t:"Hulthor should report its sustainability information as part of its annual report"},
+          {k:"E", t:"Hulthor is not required to obtain assurance over its sustainability disclosures"}
+        ],
+        ans: ["A","B","D"],
+        exp: "The CSRD applies double materiality and therefore reporting under the CSRD provides information that is useful to wider stakeholders as well as investors and providers of capital (C is false). Reports prepared under the CSRD must include information on a company's sustainability-related impacts (B), risks (A) and opportunities and should be presented in the company's annual report (D). Assurance is mandatory when reporting under CSRD (E is false)."
+      },
+      {
+        id: "Q33", lo: "LO 5d", selectCount: 1,
+        q: "Three ICAEW students have been discussing ICAEW's role in driving progress in sustainability. The students make the following statements:\n• Abel: 'ICAEW is contributing to progress by educating its students and providing training to its members on sustainability concepts and issues'.\n• Omar: 'ICAEW also mandates which standards are applied by UK-based companies, so can require that IFRS Sustainability Disclosure Standards are applied'.\n• Libby: 'ICAEW conduct research into best practice that can help accountants who are involved in sustainability reporting'.\n\nRequirement: Which student(s) is/are correct in their understanding as to the role of ICAEW in driving progress in sustainability?",
+        opts: [
+          {k:"A", t:"Libby only"},
+          {k:"B", t:"Abel and Libby only"},
+          {k:"C", t:"Abel and Omar only"},
+          {k:"D", t:"Abel, Omar and Libby"}
+        ],
+        ans: ["B"],
+        exp: "ICAEW does not have authority to mandate which standards are applied by UK-based companies, so cannot require that IFRS Sustainability Disclosure Standards are applied."
+      },
+      {
+        id: "Q34a", lo: "LO 5c", selectCount: 1,
+        q: "Sustainability assurance engagements can provide either a reasonable level of assurance or a limited level of assurance. Various statements have been made about assurance engagements.\n\nRequirement (1/2): Identify whether the following statement is correct or incorrect:\nReasonable assurance results in a positive opinion being given by the practitioner.",
+        opts: [
+          {k:"A", t:"Correct"},
+          {k:"B", t:"Incorrect"}
+        ],
+        ans: ["A"],
+        exp: "Reasonable assurance results in a positive opinion, indicating high but not absolute certainty. An example of a positive opinion is 'In my opinion, the information is prepared in accordance with the specified criteria'."
+      },
+      {
+        id: "Q34b", lo: "LO 5c", selectCount: 1,
+        q: "Sustainability assurance engagements can provide either a reasonable level of assurance or a limited level of assurance. Various statements have been made about assurance engagements.\n\nRequirement (2/2): Identify whether the following statement is correct or incorrect:\nIn a reasonable assurance engagement, the practitioner will conclude with an opinion such as: 'in the course of seeking evidence, nothing has come to my attention to indicate that the company has not complied with the specified criteria'.",
+        opts: [
+          {k:"C", t:"Correct"},
+          {k:"D", t:"Incorrect"}
+        ],
+        ans: ["D"],
+        exp: "Limited assurance results in a negative 'nothing has come to my attention' opinion, indicating a lower level of certainty and requires less evidence."
+      },
+      {
+        id: "Q35", lo: "LO 5c", selectCount: 3,
+        q: "Bobolu, a professional services firm, has been engaged to provide assurance services for a client's sustainability report, which has been prepared in accordance with GRI Standards. This engagement marks the first time Bobolu is offering assurance on the report, following a request from the client's shareholders. The primary objective is to ensure the accuracy and reliability of the information reported, particularly concerning the client's supply chain.\n\nRequirement: Which three of the following are challenges that Bobolu may encounter in obtaining sustainability assurance?",
+        opts: [
+          {k:"A", t:"The complexity of sustainability data makes it difficult to verify"},
+          {k:"B", t:"It is not possible to obtain assurance over a sustainability report prepared in accordance with GRI Standards as it is not a mandatory requirement"},
+          {k:"C", t:"Bobolu will be required to have resources and expertise readily available to support the assurance process"},
+          {k:"D", t:"There is an expectations gap between what the shareholders expect and what assurance can provide"},
+          {k:"E", t:"Bobolu's shareholders will have more confidence in the information reported"}
+        ],
+        ans: ["A","C","D"],
+        exp: "The lack of a mandatory requirement for assurance does not mean it is not possible to obtain assurance over a sustainability report prepared in accordance with GRI Standards (B). Investors having more confidence in the information reported is a benefit of obtaining sustainability assurance (E)."
+      },
+      {
+        id: "Q36", lo: "LO 5d", selectCount: 1,
+        q: "Requirement: Which of the following is not a role played by an accountancy body in driving sustainability?",
+        opts: [
+          {k:"A", t:"Providing sustainability training courses"},
+          {k:"B", t:"Supporting members in implementing sustainability strategies"},
+          {k:"C", t:"Demonstrating leadership by implementing sustainable practices into its own operations"},
+          {k:"D", t:"Setting laws requiring the adoption of sustainability standards"}
+        ],
+        ans: ["D"],
+        exp: "Accountancy bodies cannot set laws requiring the adoption of sustainability standards. This is the role of governments. They can however help to shape sustainability regulations and policies."
+      },
+      {
+        id: "Q37", lo: "LO 5d", selectCount: 1,
+        q: "Requirement: Which of the following actions represents an accountancy body playing an active role in driving sustainability through education and training?",
+        opts: [
+          {k:"A", t:"Introducing a mandatory sustainability training programme with certification for members"},
+          {k:"B", t:"Requiring that members complete an annual sustainability declaration"},
+          {k:"C", t:"Working with governments to help shape sustainability regulation"},
+          {k:"D", t:"Conducting research into best practice in sustainability reporting"}
+        ],
+        ans: ["A"],
+        exp: "A sustainability training programme with certification would demonstrate that the accountancy body drives sustainability through education and training."
+      },
+      {
+        id: "Q38", lo: "LO 5d", selectCount: 2,
+        q: "ICAEW is involved in promoting sustainability practices among its members and within the accounting profession.\n\nRequirement: Which two of the following actions are ways in which ICAEW drives sustainability among its members?",
+        opts: [
+          {k:"A", t:"Issuing financial penalties to members who do not follow sustainable practices"},
+          {k:"B", t:"Publishing guidelines to help accountancy firms reduce their carbon footprint"},
+          {k:"C", t:"Encouraging its members and firms to operate under the UN Sustainable Development Goals"},
+          {k:"D", t:"Mandating that all member firms must achieve net zero emissions by 2030"},
+          {k:"E", t:"Requiring all member firms to provide information regarding their sustainable business practices to ICAEW"}
+        ],
+        ans: ["B","C"],
+        exp: "Sustainability is a core part of ICAEW's strategy for 2020-2030, including co-publishing guidelines such as the Net Zero Accountancy Protocol (B) and encouraging members and firms to adopt the UN SDGs (C). ICAEW does not issue penalties or fines (A), has not mandated net zero by 2030 (D), nor does it require firms to report their sustainable business practices to ICAEW (E)."
+      },
+      {
+        id: "Q39a", lo: "LO 2a, 5e", selectCount: 1,
+        q: "Vance & Collins is a professional accountancy firm. Its senior partner has recognised the importance of demonstrating its own sustainability credentials in order to increase its credibility when advising its clients and has suggested several actions to help it to improve its environmental and social sustainability.\n\nRequirement (1/3): Identify whether the following action helps Vance & Collins to improve its environmental sustainability or its social sustainability:\nProviding employees with a day of paid leave to participate in local community projects.",
+        opts: [
+          {k:"A", t:"Environmental sustainability"},
+          {k:"B", t:"Social sustainability"}
+        ],
+        ans: ["B"],
+        exp: "Actions that support community engagement improve social sustainability."
+      },
+      {
+        id: "Q39b", lo: "LO 2a, 5e", selectCount: 1,
+        q: "Vance & Collins is a professional accountancy firm. Its senior partner has recognised the importance of demonstrating its own sustainability credentials in order to increase its credibility when advising its clients and has suggested several actions to help it to improve its environmental and social sustainability.\n\nRequirement (2/3): Identify whether the following action helps Vance & Collins to improve its environmental sustainability or its social sustainability:\nChanging to use eco-friendly materials such as natural cleaning products and plant-based ink.",
+        opts: [
+          {k:"C", t:"Environmental sustainability"},
+          {k:"D", t:"Social sustainability"}
+        ],
+        ans: ["C"],
+        exp: "These are examples of replacing materials with those that are more environmentally friendly, which will improve environmental sustainability."
+      },
+      {
+        id: "Q39c", lo: "LO 2a, 5e", selectCount: 1,
+        q: "Vance & Collins is a professional accountancy firm. Its senior partner has recognised the importance of demonstrating its own sustainability credentials in order to increase its credibility when advising its clients and has suggested several actions to help it to improve its environmental and social sustainability.\n\nRequirement (3/3): Identify whether the following action helps Vance & Collins to improve its environmental sustainability or its social sustainability:\nImplementing smart heating and cooling systems to minimise energy consumption.",
+        opts: [
+          {k:"E", t:"Environmental sustainability"},
+          {k:"F", t:"Social sustainability"}
+        ],
+        ans: ["E"],
+        exp: "Reducing energy consumption improves environmental sustainability."
+      },
+      {
+        id: "Q40", lo: "LO 2a, 5e", selectCount: 3,
+        q: "Avery, Rohana & Smart (AHS) is a professional accountancy firm. It is aiming to achieve net-zero within 10 years in order to demonstrate its commitment to driving sustainability progress and plans to undertake actions to help it achieve that target.\n\nRequirement: Which three of the following actions will help AHS to progress towards its aim?",
+        opts: [
+          {k:"A", t:"Implementing a digital-only approach for documentation, communication and reporting"},
+          {k:"B", t:"Investing in online meetings tools to reduce the need for business travel"},
+          {k:"C", t:"Advising its clients about sustainable finance options such as green loans and blue bonds"},
+          {k:"D", t:"Installing solar panels on the roofs of its owned office buildings"},
+          {k:"E", t:"Promoting a better work-life balance for its employees by offering flexible working options"}
+        ],
+        ans: ["A","B","D"],
+        exp: "Implementing a digital-only approach (A) will reduce waste. Reducing business travel (B) will cut emissions and installing solar panels (D) transitions to green energy—all helping AHS progress towards net-zero. Advising clients (C) helps sustainability generally but not AHS's own net-zero goal, and flexible working (E) improves social sustainability."
+      },
+      {
+        id: "Q41", lo: "LO 5e", selectCount: 1,
+        q: "Chen & Co provides taxation services to clients. It is committed to integrating sustainability into its operations to demonstrate its commitment to becoming a more sustainable business in the long term. The firm is developing a strategy to improve its social sustainability. The partners have identified the following potential actions:\n(1) Implementing an office supplies recycling programme in its offices.\n(2) Allowing all employees three days per annum to attend training courses.\n(3) Providing flexible working hours and remote work options to employees.\n\nRequirement: Which actions would improve Chen & Co's social sustainability?",
+        opts: [
+          {k:"A", t:"1 and 2 only"},
+          {k:"B", t:"2 and 3 only"},
+          {k:"C", t:"1 and 3 only"},
+          {k:"D", t:"1, 2 and 3"}
+        ],
+        ans: ["B"],
+        exp: "Implementing a recycling programme (1) will improve environmental sustainability but not social sustainability. Training courses (2) and flexible/remote working (3) improve social sustainability."
+      },
+      {
+        id: "Q42", lo: "LO 5e", selectCount: 1,
+        q: "Brown & Chalmers is a large professional accountancy firm. It is developing a sustainability strategy, including actions to improve its governance. The firm's management has proposed several initiatives, including:\n(1) Changing workplace pension funds to ensure all investments meet strict ethical guidelines.\n(2) Establishing policies to enhance diversity and representation amongst its partners and directors.\n(3) Creating and implementing a firm code of ethics and conduct for use in all client relationships.\n\nRequirement: Which of the proposed initiatives will improve governance?",
+        opts: [
+          {k:"A", t:"1 and 2 only"},
+          {k:"B", t:"1 and 3 only"},
+          {k:"C", t:"2 and 3 only"},
+          {k:"D", t:"1, 2 and 3"}
+        ],
+        ans: ["C"],
+        exp: "Changing pension funds (1) is likely to improve social sustainability but is not directly related to governance. Diversity among partners/directors (2) and a firm code of ethics and conduct (3) improve governance."
+      },
+      {
+        id: "Q43a", lo: "LO 5a", selectCount: 1,
+        q: "You are a professional accountant working for Abe Co (Abe). Your colleagues have made several points about sustainability reporting, and you have been asked to identify whether each point is a challenge or benefit of sustainability reporting.\n\nRequirement (1/3): Identify whether the following is a challenge or benefit of sustainability reporting:\nGathering data for inclusion in a sustainability report has resulted in Abe identifying and managing risks more effectively.",
+        opts: [
+          {k:"A", t:"Challenge"},
+          {k:"B", t:"Benefit"}
+        ],
+        ans: ["B"],
+        exp: "Identifying and managing risks is a benefit of sustainability reporting."
+      },
+      {
+        id: "Q43b", lo: "LO 5a", selectCount: 1,
+        q: "You are a professional accountant working for Abe Co (Abe). Your colleagues have made several points about sustainability reporting, and you have been asked to identify whether each point is a challenge or benefit of sustainability reporting.\n\nRequirement (2/3): Identify whether the following is a challenge or benefit of sustainability reporting:\nAbe has found it difficult to obtain reliable information about its supply chain, resulting in less information being disclosed.",
+        opts: [
+          {k:"C", t:"Challenge"},
+          {k:"D", t:"Benefit"}
+        ],
+        ans: ["C"],
+        exp: "Collecting reliable information for inclusion in a sustainability report is a challenge for companies."
+      },
+      {
+        id: "Q43c", lo: "LO 5a", selectCount: 1,
+        q: "You are a professional accountant working for Abe Co (Abe). Your colleagues have made several points about sustainability reporting, and you have been asked to identify whether each point is a challenge or benefit of sustainability reporting.\n\nRequirement (3/3): Identify whether the following is a challenge or benefit of sustainability reporting:\nReporting sustainability information alongside the annual report has attracted the attention of shareholders and has increased the number and depth of questions at the annual general meeting.",
+        opts: [
+          {k:"E", t:"Challenge"},
+          {k:"F", t:"Benefit"}
+        ],
+        ans: ["F"],
+        exp: "Increased openness and transparency is a benefit of sustainability reporting."
+      },
+      {
+        id: "Q44", lo: "LO 5a", selectCount: 1,
+        q: "Casunk Ltd (Casunk) is developing its sustainability report to provide information to its diverse range of stakeholders including its lenders, employees, customers, and the general public. It has decided to adopt the ISSB's IFRS Sustainability Disclosure Standards.\n\nRequirement: Which of the following should Casunk adopt to comply with the standards and address the needs of its diverse range of stakeholders?",
+        opts: [
+          {k:"A", t:"Include information on sustainability-related risks and opportunities and certain required impacts"},
+          {k:"B", t:"Include information on matters that primarily focus on financial materiality"},
+          {k:"C", t:"Include information exclusively on the environmental impact of Casunk"},
+          {k:"D", t:"Include information on risk and opportunities relating to environmental sustainability only"}
+        ],
+        ans: ["A"],
+        exp: "By including information on both impacts (how the company's operations affect people and the environment) and risks and opportunities (how these impacts and dependencies create risks and opportunities for the company), Casunk can comply with the IFRS Sustainability Disclosure Standards and provide comprehensive information that satisfies both investors and a broader range of stakeholders."
+      },
+      {
+        id: "Q45", lo: "LO 5b", selectCount: 1,
+        q: "Three colleagues have been discussing the Global Reporting Initiative (GRI) Standards, IFRS Sustainability Disclosure Standards and the European Union's Corporate Sustainability Reporting Directive (CSRD):\n• Nathan: 'GRI Standards are voluntary; however, IFRS Sustainability Disclosure Standards and the CSRD are both mandatory for certain EU-based companies'.\n• Yves: 'The CSRD is the only one of these three frameworks designed to produce information that is useful to investors and wider stakeholders'.\n• Mehool: 'IFRS Sustainability Disclosure Standards require both sustainability and climate-related information to be reported under the four areas of governance, strategy, risk management and metrics and targets'.\n\nRequirement: Which of the colleagues is/are correct?",
+        opts: [
+          {k:"A", t:"Nathan only"},
+          {k:"B", t:"Nathan and Yves"},
+          {k:"C", t:"Mehool only"},
+          {k:"D", t:"Yves and Mehool"}
+        ],
+        ans: ["D"],
+        exp: "Yves is correct that only the CSRD aims to provide information that is useful to both investors and wider stakeholders as it applies double (financial and impact) materiality. Mehool is correct that IFRS Sustainability Disclosure Standards require information to be reported under four areas. Nathan is incorrect as IFRS Sustainability Disclosure Standards are not mandatory for EU companies."
+      },
+      {
+        id: "Q46", lo: "LO 5e", selectCount: 3,
+        q: "Professional accountants working in practice play a key role in driving sustainability progress in the clients they work with.\n\nRequirement: Which three of the following are ways in which a professional accountant working in practice may drive sustainability progress in their clients?",
+        opts: [
+          {k:"A", t:"Providing assurance to verify the reliability of sustainability information disclosed"},
+          {k:"B", t:"Providing sustainable finance to support a client's sustainability initiatives"},
+          {k:"C", t:"Implementing a new policy regarding the suppliers used by the client"},
+          {k:"D", t:"Preparing external reports which satisfy the client's mandatory reporting requirements"},
+          {k:"E", t:"Assisting with the design of management control systems intended to improve sustainability"}
+        ],
+        ans: ["A","D","E"],
+        exp: "A professional accountant in practice may provide assurance (A) over sustainability information prepared by a client, may prepare reports on behalf of a client (D) or may assist with the design of management control systems (E). They cannot provide sustainable finance (B) but can advise on suitable types, and cannot implement a new policy on behalf of a client (C), only advise on it."
+      },
+      {
+        id: "Q47", lo: "LO 5b", selectCount: 1,
+        q: "The European Union (EU) has a number of regulations in place to address sustainability, including the Corporate Sustainability Reporting Directive (CSRD).\n\nRequirement: Which of the following statements regarding the CSRD is correct?",
+        opts: [
+          {k:"A", t:"The CSRD is mandatory for all companies within the EU"},
+          {k:"B", t:"An aim of the CSRD is to help businesses take account of sustainability in their strategies"},
+          {k:"C", t:"The CSRD requires companies to report only on how their operations affect people and the environment"},
+          {k:"D", t:"The CSRD makes sustainability reporting more important than financial reporting in the EU"}
+        ],
+        ans: ["B"],
+        exp: "An aim of the CSRD is to help businesses take account of sustainability in their strategies, as well as driving transparency and accountability through external reporting. The CSRD is mandatory for certain companies depending on listing status and size (A), puts sustainability reporting on an equal footing with financial reporting (D), and requires double materiality reporting (C)."
+      },
+      {
+        id: "Q48", lo: "LO 5b", selectCount: 1,
+        q: "Which of the following statements is true?\n(1) Modern Slavery Act (MSA): The Modern Slavery Act 2015 requires businesses over a certain size to disclose their actions to prevent slavery in their supply chains.\n(2) Bribery Act: The Bribery Act 2010 makes it an offence for British nationals or companies to offer, promise, or give a bribe anywhere in the world.",
+        opts: [
+          {k:"A", t:"1 only"},
+          {k:"B", t:"2 only"},
+          {k:"C", t:"1 and 2"},
+          {k:"D", t:"Neither 1 nor 2"}
+        ],
+        ans: ["C"],
+        exp: "Statement 1 is true because the Modern Slavery Act 2015 mandates that businesses above a certain size must report on the steps they are taking to prevent modern slavery and human trafficking in their operations and supply chains. Statement 2 is true because the Bribery Act 2010 establishes that it is illegal for British nationals or companies to engage in bribery, regardless of where the bribery occurs."
+      },
+      {
+        id: "Q49", lo: "LO 5b", selectCount: 1,
+        q: "Three colleagues, Opal, Duncan and Anitha, are discussing the Greenhouse Gas (GHG) Protocol.\n• Opal: 'The GHG Protocol was established to create a standardised method for financial accounting and reporting'.\n• Duncan: 'The GHG Protocol provides a science-based framework for businesses to use in reporting GHG emissions across the value chain'.\n• Anitha: 'The GHG Protocol creates a standardised method for GHG accounting, which is part of the environmental component of ESG metrics'.\n\nRequirement: Which of the colleagues are correct?",
+        opts: [
+          {k:"A", t:"Opal and Duncan"},
+          {k:"B", t:"Duncan and Anitha"},
+          {k:"C", t:"Opal and Anitha"},
+          {k:"D", t:"Opal, Duncan and Anitha"}
+        ],
+        ans: ["B"],
+        exp: "Anitha is correct in stating that the GHG Protocol creates a standardised method for GHG accounting, which is part of the environmental component of ESG metrics. Duncan is correct that the GHG Protocol issued the 'Corporate Standard' to provide a global science-based framework for measuring, managing and reporting corporate GHG emissions across a business's value chain. Opal is incorrect because the GHG Protocol focuses on GHG accounting, not financial accounting."
+      },
+      {
+        id: "Q50", lo: "LO 5e", selectCount: 1,
+        q: "In a discussion about the role of professional accountants in promoting sustainability, three colleagues share their views.\n• Andras says, 'It is important that professional accountants lead by example in embedding sustainability into their strategy'.\n• Kassa says, 'Professional accountancy firms should not advise their clients on sustainability issues, only financial issues'.\n• Sami says, 'Accountancy firms do not need to create sustainability plans; they are only relevant to accountants in business'.\n\nRequirement: Which, if any, of the colleagues is correct?",
+        opts: [
+          {k:"A", t:"Andras"},
+          {k:"B", t:"Kassa"},
+          {k:"C", t:"Sami"},
+          {k:"D", t:"None of them"}
+        ],
+        ans: ["A"],
+        exp: "Andras is correct that professional accountants should lead by example in embedding sustainability into their strategy. Kassa is incorrect since accountancy firms can and should advise clients on sustainability issues. Sami is incorrect as accountancy firms themselves need to create and implement sustainability plans within their own operations."
+      },
+      {
+        id: "Q51", lo: "LO 5a", selectCount: 1,
+        q: "Requirement: What role do accountants play in supporting sustainability within organisations?",
+        opts: [
+          {k:"A", t:"Persuading shareholders to change their behaviour"},
+          {k:"B", t:"Measuring, recording and reporting on impacts and costs"},
+          {k:"C", t:"Developing new technologies for sustainability"},
+          {k:"D", t:"Analysing the causes of climate change"}
+        ],
+        ans: ["B"],
+        exp: "Accountants' sustainability duties include measuring, recording and reporting on impacts and costs; ensuring compliance with reporting standards; and analysing risks and opportunities related to sustainability."
+      }
+    ];
+
+    // =========================================================================
+    // 2. 20 CORE FLASHCARDS — CHAPTER 5
+    // =========================================================================
+    const FLASHCARDS = [
+      {
+        id: "FC1", tag: "LO 5a",
+        front: "Sustainability Reporting — Benefits (Lợi ích)",
+        back: "• Tăng tính minh bạch & trách nhiệm giải trình (transparency & accountability).\n• Giúp tiếp cận vốn vay ngân hàng & các nguồn tài chính.\n• Hỗ trợ tuân thủ quy định (regulatory compliance).\n• Tăng gắn kết nhân viên (employee engagement).\n• Giúp nhận diện & quản trị rủi ro tốt hơn.\n⚠️ Bẫy: KHÔNG đảm bảo tăng doanh thu, KHÔNG giảm chi phí sản xuất, KHÔNG tự động đảm bảo hành động đã bền vững."
+      },
+      {
+        id: "FC2", tag: "LO 5a",
+        front: "Sustainability Reporting — Challenges (Thách thức)",
+        back: "• Thu thập dữ liệu chính xác và đáng tin cậy (đặc biệt từ chuỗi cung ứng) rất tốn thời gian.\n• Tốn nhiều nguồn lực (intensive resources) để lập báo cáo.\n• Khó khăn trong việc chọn khung báo cáo phù hợp với mục tiêu.\n• Nguy cơ chỉ báo cáo mặt tích cực quá mức → dẫn tới cáo buộc greenwashing."
+      },
+      {
+        id: "FC3", tag: "LO 5a, 5b",
+        front: "Impacts vs. Risks & Opportunities",
+        back: "• Impacts (Tác động): Cách hoạt động của DN ảnh hưởng tới con người & môi trường (vd: ngày nghỉ tình nguyện, chuyển sang xe điện, phản ứng cộng đồng).\n• Risks & Opportunities (Rủi ro & Cơ hội): Cách các vấn đề bền vững ảnh hưởng ngược lại tới hiệu quả tài chính của DN (vd: khan hiếm nước/lao động, thuế quan mới) → Đây là thông tin chính mà NHÀ ĐẦU TƯ & BÊN CHO VAY quan tâm."
+      },
+      {
+        id: "FC4", tag: "LO 5b",
+        front: "UK Companies Act 2006 — Strategic Report",
+        back: "• Đối tượng chính: Hướng tới CỔ ĐÔNG (shareholders), không phải toàn bộ stakeholders.\n• Bắt buộc gồm: Rủi ro & bất định chính (gồm rủi ro bền vững), công bố tài chính liên quan khí hậu (climate-related financial disclosures), đa dạng giới, nhân quyền, chống tham nhũng/hối lộ.\n• KHÔNG bắt buộc: Kế hoạch ra mắt sản phẩm mới, 4 trụ cột TCFD, hay tính GHG theo GHG Protocol."
+      },
+      {
+        id: "FC5", tag: "LO 5b",
+        front: "TCFD — 4 Core Areas & Role",
+        back: "4 trụ cột công bố bắt buộc của TCFD (và IFRS S1/S2, TNFD):\n1. Governance\n2. Strategy\n3. Risk management\n4. Metrics and targets\n\n• Yêu cầu công bố phát thải GHG.\n• ⚠️ Bẫy: TCFD KHÔNG có quyền bắt buộc và KHÔNG giám sát/kiểm tra việc tuân thủ (chỉ là khuyến nghị, sau đó một số quốc gia tự luật hóa thành bắt buộc)."
+      },
+      {
+        id: "FC6", tag: "LO 5b",
+        front: "ISSB — IFRS S1 & IFRS S2",
+        back: "• Đối tượng chính: Nhà đầu tư & bên cung cấp vốn (investors & lenders).\n• Vị trí trình bày: Bắt buộc nằm TRONG Báo cáo thường niên (Annual Report), cùng với BCTC.\n• IFRS S1: Yêu cầu chung về thông tin tài chính liên quan bền vững (phạm vi rộng).\n• IFRS S2: Tập trung vào biến đổi khí hậu — yêu cầu công bố rủi ro, cơ hội & tính GHG theo GHG Protocol Corporate Standard.\n• ISSB KHÔNG có quyền tự bắt buộc áp dụng (tùy từng quốc gia)."
+      },
+      {
+        id: "FC7", tag: "LO 5b",
+        front: "EU CSRD & ESRS & Double Materiality",
+        back: "• Bắt buộc cho công ty EU (kể cả chưa niêm yết) nếu đạt ngưỡng quy mô (nhân sự, doanh thu, tài sản) — đặt báo cáo bền vững ngang hàng BCTC.\n• Chuẩn mực áp dụng: Phải dùng ESRSs (KHÔNG phải IFRS Sustainability Disclosure Standards!).\n• Double Materiality: Công bố cả Risks/Opportunities (tài chính) lẫn Impacts (tác động) → phục vụ CẢ nhà đầu tư lẫn rộng rãi stakeholders.\n• BẮT BUỘC có Đảm bảo (Assurance) và nằm trong Annual Report."
+      },
+      {
+        id: "FC8", tag: "LO 5b",
+        front: "EU CSDDD (Corporate Sustainability Due Diligence Directive)",
+        back: "• Áp dụng cho: Công ty LỚN tại EU và công ty lớn ngoài EU đạt ngưỡng doanh thu quy định (KHÔNG phải mọi công ty EU).\n• Phạm vi: Áp dụng cho hoạt động nội bộ VÀ toàn bộ chuỗi giá trị toàn cầu (global value chains).\n• Nội dung: Nhận diện và giải quyết tác động bất lợi về CẢ NHÂN QUYỀN (human rights) LẪN MÔI TRƯỜNG (environmental impacts)."
+      },
+      {
+        id: "FC9", tag: "LO 5b",
+        front: "EU CBAM (Carbon Border Adjustment Mechanism)",
+        back: "• Áp dụng cho hàng hóa NHẬP KHẨU vào EU.\n• Mục đích chính: Ngăn chặn rò rỉ carbon (carbon leakage) bằng cách đánh giá/áp giá carbon lên hàng nhập khẩu vào EU."
+      },
+      {
+        id: "FC10", tag: "LO 5b",
+        front: "GRI Standards (Global Reporting Initiative)",
+        back: "• Tính chất: TỰ NGUYỆN (voluntary — không bắt buộc tại Anh).\n• Đối tượng chính: Rộng rãi các bên liên quan (nhân viên, khách hàng, công chúng).\n• Trọng tâm: Impact Materiality — chỉ báo cáo về TÁC ĐỘNG (impacts) của DN lên con người & môi trường (KHÔNG tập trung vào rủi ro/cơ hội tài chính hay sự phụ thuộc)."
+      },
+      {
+        id: "FC11", tag: "LO 5b",
+        front: "TNFD (Taskforce on Nature-related Financial Disclosures)",
+        back: "• Cung cấp khuyến nghị công bố thông tin về rủi ro và cơ hội liên quan đến THIÊN NHIÊN (nature-related risks and opportunities).\n• Đối tượng sử dụng chính: Nhà đầu tư và bên cho vay (investors and lenders)."
+      },
+      {
+        id: "FC12", tag: "LO 5b",
+        front: "GHG Protocol Corporate Standard",
+        back: "• Cung cấp khung chuẩn hóa dựa trên khoa học (science-based framework) toàn cầu để đo lường, quản lý và báo cáo phát thải khí nhà kính (GHG accounting) xuyên suốt chuỗi giá trị.\n• Thuộc thành phần Môi trường (E) trong chỉ số ESG.\n• KHÔNG phải chuẩn mực kế toán tài chính (financial accounting)."
+      },
+      {
+        id: "FC13", tag: "LO 5c",
+        front: "Reasonable Assurance vs. Limited Assurance",
+        back: "• Reasonable Assurance: Thu thập nhiều bằng chứng (high level of evidence) → Đưa ra ý kiến KHẲNG ĐỊNH (Positive opinion: 'In my opinion, the information is prepared in accordance with...').\n• Limited Assurance: Thu thập ít bằng chứng hơn → Đưa ra ý kiến PHỦ ĐỊNH (Negative opinion: 'Nothing has come to our attention to indicate that...').\n⚠️ Không bao giờ có 'Absolute assurance' (100% chắc chắn) do hạn chế vốn có."
+      },
+      {
+        id: "FC14", tag: "LO 5c",
+        front: "Sustainability Assurance — Benefits & Challenges",
+        back: "• Lợi ích: Tăng độ tin cậy (credibility), tăng niềm tin thị trường/nhà đầu tư, giúp phát hiện thêm rủi ro bền vững & tư vấn cải thiện báo cáo/tuân thủ.\n• Thách thức: Dữ liệu bền vững phức tạp/chủ quan khó xác minh, đòi hỏi nguồn lực & chuyên môn cao, và Expectations Gap (khoảng cách kỳ vọng — người dùng lầm tưởng là đảm bảo tuyệt đối 100%)."
+      },
+      {
+        id: "FC15", tag: "LO 5d",
+        front: "Role of Accountancy Bodies (ICAEW)",
+        back: "ICAEW LÀM:\n• Phối hợp nhà hoạch định chính sách góp ý xây dựng quy định.\n• Giáo dục, đào tạo (vd: khóa học cấp chứng chỉ), nghiên cứu best practice.\n• Ban hành hướng dẫn (Net Zero Accountancy Protocol) & khuyến khích hội viên áp dụng UN SDGs.\n\n⚠️ ICAEW KHÔNG LÀM: KHÔNG ban hành luật/bắt buộc chuẩn mực (việc của Chính phủ), KHÔNG phạt tiền hội viên chưa bền vững, KHÔNG tư vấn trực tiếp cho khách hàng của hội viên."
+      },
+      {
+        id: "FC16", tag: "LO 5e",
+        front: "Accountants in Practice — Driving Client Sustainability",
+        back: "Kế toán viên hành nghề (in practice) CÓ THỂ:\n• Cung cấp dịch vụ đảm bảo (assurance) xác minh thông tin bền vững.\n• Lập báo cáo bên ngoài đáp ứng yêu cầu bắt buộc cho khách hàng.\n• Hỗ trợ thiết kế hệ thống kiểm soát quản trị (management control systems).\n\n⚠️ KHÔNG THỂ: Không tự cấp vốn bền vững (chỉ tư vấn loại hình) và không trực tiếp thực thi chính sách thay khách hàng."
+      },
+      {
+        id: "FC17", tag: "LO 5a, 5e",
+        front: "Role of Accountants in Organisations & Leading by Example",
+        back: "• Nhiệm vụ cốt lõi trong tổ chức: Đo lường, ghi nhận và báo cáo tác động & chi phí (measuring, recording and reporting on impacts and costs), đảm bảo tuân thủ chuẩn mực & phân tích rủi ro/cơ hội.\n• Lead by example: Các công ty kế toán cũng phải tự xây dựng kế hoạch bền vững cho chính mình để tăng uy tín khi tư vấn khách hàng."
+      },
+      {
+        id: "FC18", tag: "LO 2a, 5e",
+        front: "Accountancy Firms: Environmental & Net-Zero Actions",
+        back: "Hành động giúp công ty kế toán đạt Net-Zero / Cải thiện Môi trường:\n• Chuyển đổi hoàn toàn kỹ thuật số (digital-only / không giấy tờ).\n• Đầu tư công cụ họp trực tuyến giảm đi lại công tác.\n• Lắp pin năng lượng mặt trời trên mái văn phòng.\n• Dùng vật liệu thân thiện môi trường (mực gốc thực vật), hệ thống sưởi/làm mát thông minh."
+      },
+      {
+        id: "FC19", tag: "LO 5e",
+        front: "Accountancy Firms: Social vs. Governance Actions",
+        back: "• Social: Cho nhân viên nghỉ có lương đi tình nguyện cộng đồng, cấp 3 ngày/năm đi học đào tạo, làm việc linh hoạt/từ xa, chuyển quỹ hưu trí sang đầu tư đạo đức.\n• Governance: Chính sách tăng đa dạng & đại diện trong ban đối tác/giám đốc (partners & directors), xây dựng bộ quy tắc đạo đức & ứng xử (code of ethics and conduct)."
+      },
+      {
+        id: "FC20", tag: "LO 5b",
+        front: "Modern Slavery Act 2015 & Bribery Act 2010",
+        back: "• Modern Slavery Act 2015 (MSA): Yêu cầu doanh nghiệp vượt ngưỡng quy mô nhất định phải công bố các hành động ngăn chặn nô lệ hiện đại & buôn người trong hoạt động và chuỗi cung ứng.\n• Bribery Act 2010: Quy định công dân hoặc công ty Anh đề nghị, hứa hẹn hoặc đưa hối lộ ở BẤT KỲ ĐÂU trên thế giới đều là hành vi phạm tội."
+      }
+    ];
+
+    // =========================================================================
+    // 3. LOCALSTORAGE & STATE MANAGEMENT (UNIQUE PREFIX: icaew_c5_)
+    // =========================================================================
+    const KEYS = {
+      cycleNum: "icaew_c5_cycle_num",
+      flagged: "icaew_c5_flagged",
+      history: "icaew_c5_history",
+      flashcards: "icaew_c5_flashcards"
+    };
+
+    let persisted = {
+      cycleNumber: 1,
+      flaggedIds: [],
+      cycleHistory: [],
+      fcStatus: {}
+    };
+
+    let state = {
+      activeTab: "quiz",     // 'quiz' | 'flashcards'
+      quizMode: "practice",  // 'practice' | 'exam'
+      cycleType: "full",     // 'full' | 'review_set' | 'flagged'
+      order: [],
+      currentIndex: 0,
+      answers: {},           // { qId: { selected: [], checked: false, isCorrect: false } }
+      examGraded: false,
+      // Flashcards
+      fcOrder: FLASHCARDS.map(f => f.id),
+      fcFilter: "all",       // 'all' | 'review' | 'mastered'
+      fcIndex: 0,
+      fcFlipped: false
+    };
+
+    function loadPersisted() {
+      try {
+        const cNum = parseInt(localStorage.getItem(KEYS.cycleNum), 10);
+        if (!isNaN(cNum) && cNum >= 1) persisted.cycleNumber = cNum;
+
+        const flagged = JSON.parse(localStorage.getItem(KEYS.flagged) || "[]");
+        if (Array.isArray(flagged)) persisted.flaggedIds = flagged;
+
+        const history = JSON.parse(localStorage.getItem(KEYS.history) || "[]");
+        if (Array.isArray(history)) persisted.cycleHistory = history;
+
+        const fc = JSON.parse(localStorage.getItem(KEYS.flashcards) || "{}");
+        if (fc && typeof fc === "object") persisted.fcStatus = fc;
+      } catch (e) {
+        console.warn("LocalStorage load error:", e);
+      }
+    }
+
+    function savePersisted() {
+      try {
+        localStorage.setItem(KEYS.cycleNum, String(persisted.cycleNumber));
+        localStorage.setItem(KEYS.flagged, JSON.stringify(persisted.flaggedIds));
+        localStorage.setItem(KEYS.history, JSON.stringify(persisted.cycleHistory));
+        localStorage.setItem(KEYS.flashcards, JSON.stringify(persisted.fcStatus));
+      } catch (e) {
+        console.warn("LocalStorage save error:", e);
+      }
+    }
+
+    // Fisher-Yates shuffle
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function getQuestionById(id) {
+      return QUESTIONS.find(q => q.id === id);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.remove("hidden");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.add("hidden"), 2400);
+    }
+
+    function splitQuestionParts(fullText) {
+      const idx = fullText.indexOf("\n\nRequirement");
+      if (idx !== -1) {
+        return {
+          scenario: fullText.slice(0, idx).trim(),
+          requirement: fullText.slice(idx + 2).trim()
+        };
+      }
+      return { scenario: "", requirement: fullText };
+    }
+
+    // =========================================================================
+    // 4. TAB SWITCHING
+    // =========================================================================
+    function switchTab(tab) {
+      state.activeTab = tab;
+      document.getElementById("view-quiz").classList.toggle("hidden", tab !== "quiz");
+      document.getElementById("view-flashcards").classList.toggle("hidden", tab !== "flashcards");
+
+      const btnQuiz = document.getElementById("tab-quiz");
+      const btnFc = document.getElementById("tab-flashcards");
+      if (tab === "quiz") {
+        btnQuiz.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-white text-[#047857] shadow-sm";
+        btnFc.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900";
+        renderQuiz();
+      } else {
+        btnFc.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-white text-[#047857] shadow-sm";
+        btnQuiz.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900";
+        renderFlashcard();
+      }
+    }
+
+    function updateFlagCounter() {
+      document.getElementById("header-flag-count").textContent = persisted.flaggedIds.length;
+    }
+
+    // =========================================================================
+    // 5. QUIZ ENGINE (PRACTICE & EXAM MODES)
+    // =========================================================================
+    function startNewCycle(incrementNumber = true, customIds = null, customType = "full") {
+      closeAllModals();
+
+      if (incrementNumber && !customIds) {
+        persisted.cycleNumber += 1;
+        savePersisted();
+      }
+
+      state.cycleType = customIds ? customType : "full";
+      const ids = customIds ? customIds : QUESTIONS.map(q => q.id);
+      state.order = shuffleArray(ids);
+      state.currentIndex = 0;
+      state.answers = {};
+      state.examGraded = false;
+
+      if (state.activeTab !== "quiz") switchTab("quiz");
+      else renderQuiz();
+
+      if (customType === "review_set") {
+        showToast(`Bắt đầu luyện riêng ${ids.length} câu sai & phân vân!`);
+      } else if (customType === "flagged") {
+        showToast(`Bắt đầu luyện riêng ${ids.length} câu phân vân!`);
+      } else {
+        showToast(`Đã xáo trộn chu kỳ #${persisted.cycleNumber} (${ids.length} câu)`);
+      }
+    }
+
+    function setQuizMode(mode) {
+      if (state.quizMode === mode) return;
+      state.quizMode = mode;
+
+      const btnP = document.getElementById("mode-practice");
+      const btnE = document.getElementById("mode-exam");
+      if (mode === "practice") {
+        btnP.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-[#059669] text-white shadow-sm";
+        btnE.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:text-slate-900";
+      } else {
+        btnE.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-[#059669] text-white shadow-sm";
+        btnP.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:text-slate-900";
+      }
+
+      state.answers = {};
+      state.examGraded = false;
+      state.currentIndex = 0;
+      renderQuiz();
+      showToast(mode === "practice" ? "Chế độ Luyện tập: Hiện đáp án & giải thích ngay" : "Chế độ Kiểm tra: Nộp bài cuối chu kỳ mới chấm điểm");
+    }
+
+    function checkExactMatch(selected, correct) {
+      if (selected.length !== correct.length) return false;
+      const s = [...selected].sort();
+      const c = [...correct].sort();
+      return s.every((v, i) => v === c[i]);
+    }
+
+    function selectOption(optionKey) {
+      const qId = state.order[state.currentIndex];
+      const q = getQuestionById(qId);
+      const ans = state.answers[qId] || { selected: [], checked: false, isCorrect: false };
+
+      if ((state.quizMode === "practice" && ans.checked) || (state.quizMode === "exam" && state.examGraded)) {
+        return;
+      }
+
+      if (q.selectCount === 1) {
+        ans.selected = [optionKey];
+        if (state.quizMode === "practice") {
+          ans.checked = true;
+          ans.isCorrect = checkExactMatch(ans.selected, q.ans);
+        }
+      } else {
+        if (ans.selected.includes(optionKey)) {
+          ans.selected = ans.selected.filter(k => k !== optionKey);
+        } else {
+          if (ans.selected.length < q.selectCount) {
+            ans.selected.push(optionKey);
+          } else {
+            showToast(`Câu này chỉ chọn tối đa ${q.selectCount} đáp án.`);
+            return;
+          }
+        }
+      }
+
+      state.answers[qId] = ans;
+      renderQuiz();
+    }
+
+    function submitMultiPractice() {
+      const qId = state.order[state.currentIndex];
+      const q = getQuestionById(qId);
+      const ans = state.answers[qId];
+      if (!ans || ans.selected.length === 0) {
+        showToast(`Hãy chọn ${q.selectCount} đáp án trước khi kiểm tra.`);
+        return;
+      }
+      ans.checked = true;
+      ans.isCorrect = checkExactMatch(ans.selected, q.ans);
+      state.answers[qId] = ans;
+      renderQuiz();
+    }
+
+    function toggleFlagCurrent() {
+      const qId = state.order[state.currentIndex];
+      if (persisted.flaggedIds.includes(qId)) {
+        persisted.flaggedIds = persisted.flaggedIds.filter(id => id !== qId);
+        showToast(`Đã bỏ đánh dấu ${qId}`);
+      } else {
+        persisted.flaggedIds.push(qId);
+        showToast(`Đã đánh dấu ${qId} (Phân vân / Chọn lụi)`);
+      }
+      savePersisted();
+      updateFlagCounter();
+      renderQuiz();
+    }
+
+    function prevQuestion() {
+      if (state.currentIndex > 0) {
+        state.currentIndex--;
+        renderQuiz();
+      }
+    }
+
+    function nextQuestion() {
+      if (state.currentIndex < state.order.length - 1) {
+        state.currentIndex++;
+        renderQuiz();
+      } else {
+        finishCycle();
+      }
+    }
+
+    function jumpToQuestion(idx) {
+      state.currentIndex = idx;
+      closeNavigatorDrawer();
+      renderQuiz();
+    }
+
+    function finishCycle() {
+      const total = state.order.length;
+      let correctCount = 0;
+      let wrongCount = 0;
+      let flaggedInCycle = 0;
+
+      state.order.forEach(qId => {
+        const q = getQuestionById(qId);
+        const ans = state.answers[qId] || { selected: [], checked: false, isCorrect: false };
+        ans.checked = true;
+        ans.isCorrect = checkExactMatch(ans.selected, q.ans);
+        state.answers[qId] = ans;
+
+        if (ans.isCorrect) correctCount++;
+        else wrongCount++;
+
+        if (persisted.flaggedIds.includes(qId)) flaggedInCycle++;
+      });
+
+      const alreadyGraded = state.examGraded;
+      state.examGraded = true;
+
+      const accuracyRate = Math.round((correctCount / total) * 100);
+      const errorRate = Math.round((wrongCount / total) * 100);
+
+      if (!alreadyGraded) {
+        const label = state.cycleType === "full"
+          ? `Chu kỳ #${persisted.cycleNumber}`
+          : state.cycleType === "flagged"
+            ? `Ôn phân vân (${total} câu)`
+            : `Ôn sai & phân vân (${total} câu)`;
+
+        persisted.cycleHistory.unshift({
+          cycle: label,
+          date: new Date().toLocaleString("vi-VN", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }),
+          mode: state.quizMode === "practice" ? "Luyện tập" : "Kiểm tra",
+          total,
+          correct: correctCount,
+          wrong: wrongCount,
+          errorRate,
+          flagged: flaggedInCycle
+        });
+        if (persisted.cycleHistory.length > 30) persisted.cycleHistory.pop();
+        savePersisted();
+      }
+
+      document.getElementById("modal-cycle-subtitle").textContent =
+        `${state.cycleType === "full" ? "Chu kỳ #" + persisted.cycleNumber : "Phiên ôn tập trung"} • ${state.quizMode === "practice" ? "Chế độ Luyện tập" : "Chế độ Kiểm tra"} (${total} câu)`;
+      document.getElementById("modal-correct").textContent = `${correctCount}/${total} (${accuracyRate}%)`;
+      document.getElementById("modal-wrong").textContent = wrongCount;
+      document.getElementById("modal-error-rate").textContent = `${errorRate}%`;
+      document.getElementById("modal-flagged").textContent = flaggedInCycle;
+
+      const wrongIds = state.order.filter(id => !state.answers[id]?.isCorrect);
+      const combinedSet = Array.from(new Set([...wrongIds, ...persisted.flaggedIds]));
+      const reviewBtn = document.getElementById("modal-btn-wrong-and-flagged");
+      reviewBtn.classList.toggle("hidden", combinedSet.length === 0);
+      reviewBtn.textContent = `Luyện riêng câu sai & phân vân (${combinedSet.length} câu)`;
+
+      const preview = document.getElementById("modal-history-preview");
+      const recent = persisted.cycleHistory.slice(0, 4);
+      preview.innerHTML = `
+        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Lịch sử chu kỳ gần đây</p>
+        <div class="space-y-1.5 text-xs">
+          ${recent.map(h => `
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-700">${h.cycle} <span class="text-slate-400 font-normal">(${h.date})</span></span>
+              <span class="font-bold ${h.errorRate > 25 ? 'text-rose-600' : 'text-emerald-600'}">Sai ${h.errorRate}% (${h.correct}/${h.total})</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      renderQuiz();
+      openSummaryModal();
+    }
+
+    function startWrongAndFlaggedCycle() {
+      const wrongIds = state.order.filter(qId => {
+        const a = state.answers[qId];
+        return a && a.checked && !a.isCorrect;
+      });
+      const combined = Array.from(new Set([...wrongIds, ...persisted.flaggedIds]));
+      if (combined.length === 0) {
+        showToast("Chưa có câu sai hoặc câu phân vân nào để luyện riêng!");
+        return;
+      }
+      startNewCycle(false, combined, "review_set");
+    }
+
+    function startFlaggedOnlyCycle() {
+      if (persisted.flaggedIds.length === 0) {
+        showToast("Bạn chưa đánh dấu câu Phân vân / Chọn lụi nào.");
+        return;
+      }
+      startNewCycle(false, [...persisted.flaggedIds], "flagged");
+    }
+
+    function renderQuiz() {
+      const total = state.order.length;
+      const qId = state.order[state.currentIndex];
+      const q = getQuestionById(qId);
+      const ans = state.answers[qId] || { selected: [], checked: false, isCorrect: false };
+      const isFlagged = persisted.flaggedIds.includes(qId);
+      const showFeedback = (state.quizMode === "practice" && ans.checked) || (state.quizMode === "exam" && state.examGraded);
+
+      // Cycle Badge
+      document.getElementById("cycle-badge").textContent = state.cycleType === "full"
+        ? `Chu kỳ #${persisted.cycleNumber} (${total} câu)`
+        : state.cycleType === "flagged"
+          ? `Ôn phân vân (${total} câu)`
+          : `Ôn sai & phân vân (${total} câu)`;
+
+      // Exam Submit Button
+      document.getElementById("btn-submit-exam").classList.toggle("hidden", !(state.quizMode === "exam" && !state.examGraded));
+
+      // Exam Graded Banner
+      const banner = document.getElementById("exam-review-banner");
+      if (state.quizMode === "exam" && state.examGraded) {
+        const correctCount = state.order.filter(id => state.answers[id]?.isCorrect).length;
+        const acc = Math.round((correctCount / total) * 100);
+        document.getElementById("exam-review-stats").textContent = `Đúng ${correctCount}/${total} câu (${acc}%) • Tỷ lệ sai: ${100 - acc}%`;
+        banner.classList.remove("hidden");
+      } else {
+        banner.classList.add("hidden");
+      }
+
+      // Progress & Live Error Rate
+      const answeredCount = state.order.filter(id => {
+        const a = state.answers[id];
+        if (!a) return false;
+        return state.quizMode === "practice" ? a.checked : a.selected.length > 0;
+      }).length;
+      const pct = Math.round((answeredCount / total) * 100);
+      document.getElementById("progress-text").textContent = `${answeredCount} / ${total} câu (${pct}%)`;
+      document.getElementById("progress-bar").style.width = `${pct}%`;
+
+      const correctBadge = document.getElementById("live-correct-badge");
+      const wrongBadge = document.getElementById("live-wrong-badge");
+      if ((state.quizMode === "practice" && answeredCount > 0) || state.examGraded) {
+        const checkedIds = state.order.filter(id => state.answers[id]?.checked);
+        const correctSoFar = checkedIds.filter(id => state.answers[id].isCorrect).length;
+        const wrongSoFar = checkedIds.length - correctSoFar;
+        const errPct = checkedIds.length > 0 ? Math.round((wrongSoFar / checkedIds.length) * 100) : 0;
+
+        correctBadge.textContent = `Đúng: ${correctSoFar}`;
+        wrongBadge.textContent = `Tỷ lệ sai: ${errPct}%`;
+        correctBadge.classList.remove("hidden");
+        wrongBadge.classList.remove("hidden");
+      } else {
+        correctBadge.classList.add("hidden");
+        wrongBadge.classList.add("hidden");
+      }
+
+      // Card Meta
+      document.getElementById("q-position").textContent = `Câu ${state.currentIndex + 1} / ${total}`;
+      document.getElementById("q-original-id").textContent = q.id;
+      document.getElementById("q-lo-badge").textContent = q.lo;
+
+      const typeBadge = document.getElementById("q-type-badge");
+      if (q.selectCount > 1) {
+        typeBadge.className = "px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-bold border border-teal-200";
+        typeBadge.textContent = `Chọn ${q.selectCount} đáp án`;
+      } else {
+        typeBadge.className = "px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold";
+        typeBadge.textContent = "Chọn 1 đáp án";
+      }
+
+      // Flag Button Styling
+      const btnFlag = document.getElementById("btn-flag");
+      const btnFlagText = document.getElementById("btn-flag-text");
+      if (isFlagged) {
+        btnFlag.className = "flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all bg-amber-100 border-amber-300 text-amber-900 shadow-xs";
+        btnFlagText.textContent = "Đã đánh dấu phân vân";
+      } else {
+        btnFlag.className = "flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all bg-white border-slate-200 text-slate-600 hover:bg-slate-50";
+        btnFlagText.textContent = "Phân vân / Chọn lụi";
+      }
+
+      // Render Scenario & Requirement
+      const parts = splitQuestionParts(q.q);
+      const scenarioBox = document.getElementById("q-scenario-box");
+      if (parts.scenario) {
+        scenarioBox.classList.remove("hidden");
+        document.getElementById("q-scenario-text").textContent = parts.scenario;
+      } else {
+        scenarioBox.classList.add("hidden");
+      }
+      document.getElementById("q-text").textContent = parts.requirement;
+
+      // Render Options
+      const optionsEl = document.getElementById("q-options");
+      optionsEl.innerHTML = "";
+      q.opts.forEach(opt => {
+        const isSelected = ans.selected.includes(opt.k);
+        const isCorrectOpt = q.ans.includes(opt.k);
+
+        let btnClasses = "w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 transition-all flex items-start gap-3 ";
+        let badgeClasses = "w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 ";
+
+        if (showFeedback) {
+          if (isCorrectOpt) {
+            btnClasses += "bg-emerald-50 border-emerald-500 text-emerald-950";
+            badgeClasses += "bg-[#059669] text-white";
+          } else if (isSelected && !isCorrectOpt) {
+            btnClasses += "bg-rose-50 border-rose-400 text-rose-950";
+            badgeClasses += "bg-rose-500 text-white";
+          } else {
+            btnClasses += "bg-slate-50/70 border-slate-100 text-slate-400";
+            badgeClasses += "bg-slate-200 text-slate-500";
+          }
+        } else {
+          if (isSelected) {
+            btnClasses += "bg-teal-50 border-teal-500 text-teal-950 shadow-xs";
+            badgeClasses += "bg-teal-600 text-white";
+          } else {
+            btnClasses += "bg-white border-slate-200 hover:border-emerald-300 hover:bg-slate-50 text-slate-800";
+            badgeClasses += "bg-slate-100 text-slate-600";
+          }
+        }
+
+        const btn = document.createElement("button");
+        btn.className = btnClasses;
+        btn.onclick = () => selectOption(opt.k);
+        btn.innerHTML = `
+          <span class="${badgeClasses}">${opt.k}</span>
+          <span class="text-sm sm:text-[15px] leading-snug font-medium flex-1">${opt.t}</span>
+          ${showFeedback && isCorrectOpt ? '<span class="text-[#059669] font-bold text-sm shrink-0">✓</span>' : ''}
+          ${showFeedback && isSelected && !isCorrectOpt ? '<span class="text-rose-500 font-bold text-sm shrink-0">✕</span>' : ''}
+        `;
+        optionsEl.appendChild(btn);
+      });
+
+      // Multi-select Check Button (Practice Mode)
+      document.getElementById("multi-check-wrap").classList.toggle("hidden", !(q.selectCount > 1 && state.quizMode === "practice" && !ans.checked));
+
+      // Official Solution Box
+      const expBox = document.getElementById("explanation-box");
+      if (showFeedback) {
+        expBox.classList.remove("hidden");
+        const statusBadge = document.getElementById("exp-status-badge");
+        if (ans.isCorrect) {
+          expBox.className = "mt-6 p-4 sm:p-5 rounded-2xl border bg-emerald-50/70 border-emerald-200";
+          statusBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#059669] text-white";
+          statusBadge.textContent = "Chính xác!";
+        } else {
+          expBox.className = "mt-6 p-4 sm:p-5 rounded-2xl border bg-rose-50/70 border-rose-200";
+          statusBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-600 text-white";
+          statusBadge.textContent = "Chưa đúng";
+        }
+        document.getElementById("exp-lo-tag").textContent = q.lo;
+        document.getElementById("exp-correct-answer").textContent = `Đáp án đúng: ${q.ans.join(", ")}`;
+        document.getElementById("exp-text").textContent = q.exp;
+      } else {
+        expBox.classList.add("hidden");
+      }
+
+      // Prev / Next Buttons
+      document.getElementById("btn-prev").disabled = state.currentIndex === 0;
+      document.getElementById("btn-next").textContent = state.currentIndex === total - 1
+        ? (state.examGraded ? "Xem tổng kết" : (state.quizMode === "exam" ? "Nộp bài & Chấm điểm ✓" : "Hoàn thành chu kỳ ✓"))
+        : "Câu tiếp →";
+    }
+
+    // =========================================================================
+    // 6. MODALS & DRAWERS
+    // =========================================================================
+    function openNavigatorDrawer() {
+      const grid = document.getElementById("nav-grid");
+      grid.innerHTML = "";
+      document.getElementById("nav-modal-subtitle").textContent = `Đang ở câu ${state.currentIndex + 1} / ${state.order.length}`;
+
+      state.order.forEach((id, idx) => {
+        const a = state.answers[id];
+        const flagged = persisted.flaggedIds.includes(id);
+        let cls = "h-10 rounded-xl text-xs font-bold transition-all relative flex items-center justify-center border ";
+        if (idx === state.currentIndex) cls += "ring-2 ring-slate-900 ring-offset-1 ";
+
+        if (a && (state.quizMode === "practice" ? a.checked : state.examGraded)) {
+          cls += a.isCorrect ? "bg-emerald-500 text-white border-emerald-600" : "bg-rose-500 text-white border-rose-600";
+        } else if (a && a.selected.length > 0) {
+          cls += "bg-teal-500 text-white border-teal-600";
+        } else {
+          cls += "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100";
+        }
+
+        const btn = document.createElement("button");
+        btn.className = cls;
+        btn.onclick = () => jumpToQuestion(idx);
+        btn.innerHTML = `${idx + 1}${flagged ? '<span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-400 border-2 border-white"></span>' : ''}`;
+        grid.appendChild(btn);
+      });
+
+      document.getElementById("navigator-modal").classList.remove("hidden");
+    }
+
+    function closeNavigatorDrawer() { document.getElementById("navigator-modal").classList.add("hidden"); }
+
+    function openFlaggedDrawer() {
+      const count = persisted.flaggedIds.length;
+      document.getElementById("flagged-modal-count").textContent = `${count} câu đã đánh dấu`;
+      document.getElementById("btn-practice-flagged-modal").disabled = count === 0;
+
+      const listEl = document.getElementById("flagged-modal-list");
+      if (count === 0) {
+        listEl.innerHTML = `<p class="text-sm text-slate-400 italic py-8 text-center">Chưa có câu nào được đánh dấu Phân vân / Chọn lụi.</p>`;
+      } else {
+        listEl.innerHTML = persisted.flaggedIds.map(id => {
+          const q = getQuestionById(id);
+          if (!q) return "";
+          const parts = splitQuestionParts(q.q);
+          return `
+            <div class="p-4 rounded-2xl border border-amber-200 bg-amber-50/40 flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+              <div class="space-y-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-md bg-slate-900 text-white text-[11px] font-bold">${q.id}</span>
+                  <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-[#047857] text-[11px] font-semibold">${q.lo}</span>
+                  <span class="text-xs font-bold text-emerald-700">Đáp án: ${q.ans.join(", ")}</span>
+                </div>
+                <p class="text-sm font-semibold text-slate-900">${parts.requirement}</p>
+                <p class="text-xs text-slate-600 leading-relaxed">${q.exp}</p>
+              </div>
+              <button onclick="removeFlagged('${q.id}')" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-xs font-semibold text-slate-600 shrink-0">
+                Bỏ đánh dấu
+              </button>
+            </div>
+          `;
+        }).join("");
+      }
+
+      document.getElementById("flagged-modal").classList.remove("hidden");
+    }
+
+    function closeFlaggedDrawer() { document.getElementById("flagged-modal").classList.add("hidden"); }
+
+    function removeFlagged(qId) {
+      persisted.flaggedIds = persisted.flaggedIds.filter(id => id !== qId);
+      savePersisted();
+      updateFlagCounter();
+      openFlaggedDrawer();
+      renderQuiz();
+    }
+
+    function openHistoryModal() {
+      const body = document.getElementById("history-modal-body");
+      if (persisted.cycleHistory.length === 0) {
+        body.innerHTML = `<p class="text-sm text-slate-400 italic py-8 text-center">Chưa có chu kỳ nào hoàn thành. Hãy hoàn thành 1 chu kỳ để theo dõi tỷ lệ sai.</p>`;
+      } else {
+        body.innerHTML = `
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-500">
+                  <th class="py-2.5 pr-3 font-semibold">Chu kỳ</th>
+                  <th class="py-2.5 px-3 font-semibold">Thời gian</th>
+                  <th class="py-2.5 px-3 font-semibold">Chế độ</th>
+                  <th class="py-2.5 px-3 font-semibold">Đúng</th>
+                  <th class="py-2.5 px-3 font-semibold">Tỷ lệ sai</th>
+                  <th class="py-2.5 pl-3 font-semibold">Phân vân</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${persisted.cycleHistory.map(h => `
+                  <tr>
+                    <td class="py-2.5 pr-3 font-bold text-slate-800">${h.cycle}</td>
+                    <td class="py-2.5 px-3 text-slate-500">${h.date}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${h.mode}</td>
+                    <td class="py-2.5 px-3 font-semibold text-emerald-700">${h.correct}/${h.total}</td>
+                    <td class="py-2.5 px-3 font-bold ${h.errorRate > 25 ? 'text-rose-600' : 'text-emerald-600'}">${h.errorRate}%</td>
+                    <td class="py-2.5 pl-3 text-amber-700 font-semibold">${h.flagged}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      cancelResetConfirm();
+      document.getElementById("history-modal").classList.remove("hidden");
+    }
+
+    function closeHistoryModal() { document.getElementById("history-modal").classList.add("hidden"); }
+
+    function showResetConfirm() {
+      document.getElementById("reset-confirm-area").innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-600">Xác nhận xóa dữ liệu C5?</span>
+          <button onclick="confirmResetAll()" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white text-xs font-semibold">Xóa</button>
+          <button onclick="cancelResetConfirm()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-semibold">Hủy</button>
+        </div>
+      `;
+    }
+
+    function cancelResetConfirm() {
+      const area = document.getElementById("reset-confirm-area");
+      if (area) {
+        area.innerHTML = `
+          <button onclick="showResetConfirm()" class="text-xs font-semibold text-rose-600 hover:text-rose-800 underline">
+            Đặt lại toàn bộ dữ liệu Chapter 5
+          </button>
+        `;
+      }
+    }
+
+    function confirmResetAll() {
+      persisted = { cycleNumber: 1, flaggedIds: [], cycleHistory: [], fcStatus: {} };
+      savePersisted();
+      updateFlagCounter();
+      closeHistoryModal();
+      startNewCycle(false);
+      renderFlashcard();
+      showToast("Đã đặt lại toàn bộ dữ liệu Chapter 5.");
+    }
+
+    function openSummaryModal() { document.getElementById("summary-modal").classList.remove("hidden"); }
+    function closeSummaryModal() { document.getElementById("summary-modal").classList.add("hidden"); }
+    function closeAllModals() {
+      closeSummaryModal();
+      closeNavigatorDrawer();
+      closeFlaggedDrawer();
+      closeHistoryModal();
+    }
+
+    // =========================================================================
+    // 7. FLASHCARDS ENGINE (20 CARDS, 3 FILTERS, 3D FLIP)
+    // =========================================================================
+    function getActiveFlashcardIds() {
+      if (state.fcFilter === "review") {
+        return state.fcOrder.filter(id => persisted.fcStatus[id] !== "mastered");
+      }
+      if (state.fcFilter === "mastered") {
+        return state.fcOrder.filter(id => persisted.fcStatus[id] === "mastered");
+      }
+      return state.fcOrder;
+    }
+
+    function setFlashcardFilter(filter) {
+      state.fcFilter = filter;
+      state.fcIndex = 0;
+      state.fcFlipped = false;
+
+      ["all", "review", "mastered"].forEach(f => {
+        const btn = document.getElementById(`fc-filter-${f}`);
+        if (f === filter) {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-[#047857] shadow-sm";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600";
+        }
+      });
+      renderFlashcard();
+    }
+
+    function shuffleFlashcards() {
+      state.fcOrder = shuffleArray(state.fcOrder);
+      state.fcIndex = 0;
+      state.fcFlipped = false;
+      renderFlashcard();
+      showToast("Đã xáo trộn 20 thẻ Flashcards!");
+    }
+
+    function flipFlashcard() {
+      state.fcFlipped = !state.fcFlipped;
+      document.getElementById("fc-card").classList.toggle("rotate-y-180", state.fcFlipped);
+    }
+
+    function markFlashcard(status) {
+      const list = getActiveFlashcardIds();
+      if (list.length === 0) return;
+
+      const fcId = list[state.fcIndex];
+      persisted.fcStatus[fcId] = status;
+      savePersisted();
+
+      showToast(status === "mastered" ? "Đã đánh dấu: Đã nhớ ✓" : "Đã đánh dấu: Cần ôn lại");
+      state.fcFlipped = false;
+
+      const nextList = getActiveFlashcardIds();
+      if (state.fcIndex >= nextList.length) {
+        state.fcIndex = Math.max(0, nextList.length - 1);
+      } else if (state.fcFilter === "all" && state.fcIndex < nextList.length - 1) {
+        state.fcIndex++;
+      }
+      renderFlashcard();
+    }
+
+    function prevFlashcard() {
+      const list = getActiveFlashcardIds();
+      if (list.length === 0) return;
+      state.fcIndex = (state.fcIndex - 1 + list.length) % list.length;
+      state.fcFlipped = false;
+      renderFlashcard();
+    }
+
+    function nextFlashcard() {
+      const list = getActiveFlashcardIds();
+      if (list.length === 0) return;
+      state.fcIndex = (state.fcIndex + 1) % list.length;
+      state.fcFlipped = false;
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const totalAll = FLASHCARDS.length;
+      const masteredCount = FLASHCARDS.filter(f => persisted.fcStatus[f.id] === "mastered").length;
+      const reviewCount = totalAll - masteredCount;
+      const pct = Math.round((masteredCount / totalAll) * 100);
+
+      document.getElementById("fc-total-count").textContent = totalAll;
+      document.getElementById("fc-review-count").textContent = reviewCount;
+      document.getElementById("fc-mastered-count").textContent = masteredCount;
+      document.getElementById("fc-mastered-stats").textContent = `Đã nhớ: ${masteredCount} / ${totalAll} (${pct}%)`;
+      document.getElementById("fc-progress-bar").style.width = `${pct}%`;
+
+      const list = getActiveFlashcardIds();
+      document.getElementById("fc-card").classList.toggle("rotate-y-180", state.fcFlipped);
+
+      if (list.length === 0) {
+        document.getElementById("fc-position").textContent = "0 / 0";
+        document.getElementById("fc-front-tag").textContent = "Chapter 5";
+        document.getElementById("fc-status-pill").className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600";
+        document.getElementById("fc-status-pill").textContent = "Danh sách trống";
+        document.getElementById("fc-front-text").textContent = state.fcFilter === "mastered"
+          ? "Bạn chưa đánh dấu thẻ nào là 'Đã nhớ'."
+          : "Tuyệt vời! Bạn đã nhớ toàn bộ 20 Flashcards Chapter 5.";
+        document.getElementById("fc-back-text").textContent = "Chuyển bộ lọc sang 'Tất cả' để ôn lại từ đầu.";
+        document.getElementById("fc-back-tag").textContent = "";
+        return;
+      }
+
+      if (state.fcIndex >= list.length) state.fcIndex = 0;
+      const fc = FLASHCARDS.find(f => f.id === list[state.fcIndex]);
+      const status = persisted.fcStatus[fc.id];
+
+      document.getElementById("fc-position").textContent = `Thẻ ${state.fcIndex + 1} / ${list.length}`;
+      document.getElementById("fc-front-tag").textContent = `${fc.id} • ${fc.tag}`;
+      document.getElementById("fc-back-tag").textContent = fc.tag;
+      document.getElementById("fc-front-text").textContent = fc.front;
+      document.getElementById("fc-back-text").textContent = fc.back;
+
+      const pill = document.getElementById("fc-status-pill");
+      if (status === "mastered") {
+        pill.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700";
+        pill.textContent = "✓ Đã nhớ";
+      } else if (status === "review") {
+        pill.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-900";
+        pill.textContent = "Cần ôn lại";
+      } else {
+        pill.className = "px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500";
+        pill.textContent = "Chưa đánh giá";
+      }
+    }
+
+    // =========================================================================
+    // 8. KEYBOARD SHORTCUTS & INITIALIZATION
+    // =========================================================================
+    document.addEventListener("keydown", (e) => {
+      const anyModalOpen =
+        !document.getElementById("summary-modal").classList.contains("hidden") ||
+        !document.getElementById("navigator-modal").classList.contains("hidden") ||
+        !document.getElementById("flagged-modal").classList.contains("hidden") ||
+        !document.getElementById("history-modal").classList.contains("hidden");
+
+      if (anyModalOpen) {
+        if (e.key === "Escape") closeAllModals();
+        return;
+      }
+
+      if (state.activeTab === "quiz") {
+        if (e.key === "ArrowLeft") prevQuestion();
+        if (e.key === "ArrowRight") nextQuestion();
+      } else if (state.activeTab === "flashcards") {
+        if (e.code === "Space") {
+          e.preventDefault();
+          flipFlashcard();
+        } else if (e.key === "ArrowLeft") {
+          prevFlashcard();
+        } else if (e.key === "ArrowRight") {
+          nextFlashcard();
+        }
+      }
+    });
+
+    // Boot App
+    loadPersisted();
+    state.order = shuffleArray(QUESTIONS.map(q => q.id));
+    updateFlagCounter();
+    renderQuiz();
+  </script>
+</body>
+</html>
